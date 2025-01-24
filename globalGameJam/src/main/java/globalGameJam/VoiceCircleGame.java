@@ -2,7 +2,11 @@ package globalGameJam;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -10,15 +14,32 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.TargetDataLine;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import be.tarsos.dsp.AudioProcessor;
-import be.tarsos.dsp.io.TarsosDSPAudioFormat;
 import be.tarsos.dsp.io.jvm.JVMAudioInputStream;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchProcessor;
 import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm;
 
 public class VoiceCircleGame extends JPanel {
+	// Inner class for Enemy
+	private static class Enemy {
+		int x, y, size;
+		private final int speed;
+
+		public Enemy(final int startX, final int startY) {
+			this.x = startX;
+			this.y = startY;
+			this.size = 30;
+			this.speed = (int) (Math.random() * 2); // Random speed between 5 and 10
+		}
+
+		public void move() {
+			x -= speed;
+		}
+	}
+
 	public static void main(final String[] args) {
 		JFrame frame = new JFrame("Voice Circle Game");
 		VoiceCircleGame game = new VoiceCircleGame();
@@ -29,11 +50,17 @@ public class VoiceCircleGame extends JPanel {
 		frame.setVisible(true);
 	}
 
-	private float circleY = 250; // Initial vertical position of the circle
-	private final int circleRadius = 20;
-	private final int windowWidth = 500;
+	private final int windowWidth = 1500;
 
 	private final int windowHeight = 500;
+	private float circleY = windowHeight / 2; // Initial vertical position of the circle
+	private final int circleRadius = 20;
+
+	private final ArrayList<Enemy> enemies = new ArrayList<>();
+
+	private final Random random = new Random();
+
+	private boolean gameOver = false;
 
 	public VoiceCircleGame() {
 		setPreferredSize(new Dimension(windowWidth, windowHeight));
@@ -41,6 +68,39 @@ public class VoiceCircleGame extends JPanel {
 
 		// Start audio processing for pitch detection
 		new Thread(this::startPitchDetection).start();
+
+		// Start enemy generation
+		new Thread(this::generateEnemies).start();
+
+		// Game loop to update enemy positions
+		new Timer(16, e -> {
+			if (!gameOver) {
+				updateEnemies();
+				checkCollisions();
+				repaint();
+			}
+		}).start();
+	}
+
+	private synchronized void checkCollisions() {
+		for (Enemy enemy : enemies) {
+			if (Math.hypot((windowWidth / 2) - enemy.x, circleY - enemy.y) < (circleRadius + (enemy.size / 2.0))) {
+				gameOver = true;
+				repaint();
+				break;
+			}
+		}
+	}
+
+	private void generateEnemies() {
+		while (!gameOver) {
+			try {
+				Thread.sleep(random.nextInt(1000)); // Random delay between enemies
+				enemies.add(new Enemy(windowWidth, random.nextInt(windowHeight - 40) + 20));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void startPitchDetection() {
@@ -50,8 +110,6 @@ public class VoiceCircleGame extends JPanel {
 			microphone.open(format);
 			microphone.start();
 
-			TarsosDSPAudioFormat tarsosFormat = new TarsosDSPAudioFormat(format.getSampleRate(),
-					format.getSampleSizeInBits(), format.getChannels(), format.isBigEndian(), format.isBigEndian());
 			JVMAudioInputStream audioStream = new JVMAudioInputStream(new AudioInputStream(microphone));
 
 			PitchDetectionHandler handler = (pitchDetectionResult, audioEvent) -> {
@@ -80,13 +138,38 @@ public class VoiceCircleGame extends JPanel {
 
 		// Clamp the circle within the window boundaries
 		circleY = Math.max(circleRadius, Math.min(windowHeight - circleRadius, circleY));
-		repaint();
+	}
+
+	private synchronized void updateEnemies() {
+		Iterator<Enemy> iterator = enemies.iterator();
+		while (iterator.hasNext()) {
+			Enemy enemy = iterator.next();
+			enemy.move();
+			if ((enemy.x + enemy.size) < 0) { // Remove enemies that go off screen
+				iterator.remove();
+			}
+		}
 	}
 
 	@Override
 	protected synchronized void paintComponent(final Graphics g) {
 		super.paintComponent(g);
+
+		if (gameOver) {
+			g.setColor(Color.WHITE);
+			g.setFont(new Font("Arial", Font.BOLD, 36));
+			g.drawString("Game Over", (windowWidth / 2) - 100, windowHeight / 2);
+			return;
+		}
+
+		// Draw the circle
 		g.setColor(Color.RED);
 		g.fillOval((windowWidth / 2) - circleRadius, (int) circleY - circleRadius, circleRadius * 2, circleRadius * 2);
+
+		// Draw enemies
+		g.setColor(Color.GREEN);
+		for (Enemy enemy : enemies) {
+			g.fillOval(enemy.x - (enemy.size / 2), enemy.y - (enemy.size / 2), enemy.size, enemy.size);
+		}
 	}
 }
