@@ -35,6 +35,9 @@ public class GamePanel extends JPanel implements Repaintable {
 					bubble.setRadius(bubble.getRadius() + 15);
 					break;
 				}
+				case KeyEvent.VK_ESCAPE: {
+					System.exit(0);
+				}
 				}
 				repaint();
 			}

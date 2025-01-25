@@ -43,6 +43,7 @@ public class MainFrame extends JFrame {
 		menuPanel = new MenuPanel(this);
 		creditsMenu = new CreditsMenuPanel(this);
 		gamePanel = new GamePanel(gameManager);
+		gameManager.setRepaintable(gamePanel);
 		setUndecorated(true);
 		this.setContentPane(menuPanel);
 		pack();
