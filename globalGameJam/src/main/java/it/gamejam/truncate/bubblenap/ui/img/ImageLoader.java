@@ -7,6 +7,8 @@ import javax.imageio.ImageIO;
 
 public class ImageLoader {
 
+	private static Image creditsBed;
+
 	private static Image credits;
 	private static Image creditsPressed;
 
@@ -28,6 +30,9 @@ public class ImageLoader {
 	private static Image playBackRed;
 	static {
 		try {
+
+			creditsBed = ImageIO
+					.read(Thread.currentThread().getContextClassLoader().getResource("img/menu/CreditsBed.png"));
 
 			background = ImageIO
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/menu/Background.png"));
@@ -112,6 +117,10 @@ public class ImageLoader {
 
 	public static Image getPlayBackWhite() {
 		return playBackRed;
+	}
+
+	public static Image getCreditsBed() {
+		return creditsBed;
 	}
 
 }
