@@ -3,10 +3,8 @@ package it.gamejam.truncate.bubblenap.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.geom.AffineTransform;
 
 import javax.swing.JPanel;
 
@@ -60,41 +58,7 @@ public class GamePanel extends JPanel implements Repaintable {
 		super.paintComponent(g);
 		g.fillOval(bubble.getX() - (int) bubble.getRadius(), bubble.getY() - (int) bubble.getRadius(),
 				(int) bubble.getRadius() * 2, (int) bubble.getRadius() * 2);
-		gameManager.getObjects().forEach(o -> {
-
-			g.fillRect(o.getX(), o.getY(), 10, 10);
-
-			Graphics2D g2d = (Graphics2D) o.getImage().getGraphics();
-
-			// Make a backup so that we can reset our graphics object after using it.
-			// AffineTransform backup = g2d.getTransform();
-
-			int imageWidth = o.getImage().getWidth(null);
-			int imageHeight = o.getImage().getHeight(null);
-
-			// Center of the image
-			int imageCenterX = imageWidth / 2;
-			int imageCenterY = imageHeight / 2;
-
-			// Create an AffineTransform for rotation
-			AffineTransform transform = new AffineTransform();
-			// Translate to the center of the image
-			transform.translate(imageCenterX, imageCenterY);
-
-//			double angle = Math.atan2(o.getTargetY() - imageCenterY, o.getTargetX() - imageCenterX);
-			double angle = Math.PI;
-
-			// Rotate around the center
-			transform.rotate(angle);
-			// Translate back to draw the image properly
-			// transform.translate(-imageWidth / 2, -imageHeight / 2);
-			g2d.setTransform(transform);
-			// Draw the rotated image
-
-			g2d.drawImage(o.getImage(), o.getX(), o.getY(), null);
-
-			g2d.dispose();
-		});
+		gameManager.getObjects().forEach(o -> g.drawImage(o.getTransformedImage(), o.getX(), o.getY(), null));
 
 		if (gameManager.isGameOver()) {
 			g.drawImage(ImageLoader.getGameover(), 0, 0, getWidth(), getHeight(), null);
