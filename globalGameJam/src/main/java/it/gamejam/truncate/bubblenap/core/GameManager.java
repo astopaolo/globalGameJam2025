@@ -68,19 +68,26 @@ public class GameManager {
 	public void startGame() {
 //		startSound();
 		running.set(true);
-		long rate = 1000 / 60;
+		long rate = 1000 / 100;
 		Runnable updater = new Runnable() {
 
 			@Override
 			public void run() {
+				long last = -1;
 				while (running.get()) {
-					getObjects().forEach(MovingObject::updatePosition);
+					if (last == -1) {
+						last = System.currentTimeMillis();
+						continue;
+					}
+					long elapsed = System.currentTimeMillis() - last;
+					getObjects().forEach(t -> t.updatePosition(elapsed));
 					getObjects().forEach(o -> {
 						if (o.collide(bubble)) {
 							gameOver();
 						}
 					});
 					repaintable.update();
+					last += elapsed;
 					try {
 						Thread.sleep(rate);
 					} catch (InterruptedException e) {

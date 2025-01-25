@@ -82,8 +82,8 @@ public class MovingObject {
 		this.y = y;
 	}
 
-	public void updatePosition() {
-		x += dx;
-		y += dy;
+	public void updatePosition(long elapsed) {
+		x += dx * elapsed * 1.6;
+		y += dy * elapsed * 1.6;
 	}
 }

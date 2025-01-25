@@ -64,7 +64,7 @@ public class SimpleAudioPlayer {
 
 	/**
 	 * constructor to initialize streams and clip
-	 * 
+	 *
 	 * @param fileAudio
 	 * @param gain
 	 * @throws UnsupportedAudioFileException
@@ -97,7 +97,7 @@ public class SimpleAudioPlayer {
 
 	/**
 	 * Work as the user enters his choice
-	 * 
+	 *
 	 * @param c
 	 * @throws IOException
 	 * @throws LineUnavailableException
@@ -130,7 +130,7 @@ public class SimpleAudioPlayer {
 
 	/**
 	 * Method to jump over a specific part
-	 * 
+	 *
 	 * @param c
 	 * @throws UnsupportedAudioFileException
 	 * @throws IOException
@@ -172,7 +172,7 @@ public class SimpleAudioPlayer {
 
 	/**
 	 * Method to reset audio stream
-	 * 
+	 *
 	 * @throws UnsupportedAudioFileException
 	 * @throws IOException
 	 * @throws LineUnavailableException
@@ -185,7 +185,7 @@ public class SimpleAudioPlayer {
 
 	/**
 	 * Method to restart the audio
-	 * 
+	 *
 	 * @throws IOException
 	 * @throws LineUnavailableException
 	 * @throws UnsupportedAudioFileException
@@ -232,7 +232,7 @@ public class SimpleAudioPlayer {
 
 	/**
 	 * Method to stop the audio
-	 * 
+	 *
 	 * @throws UnsupportedAudioFileException
 	 * @throws IOException
 	 * @throws LineUnavailableException

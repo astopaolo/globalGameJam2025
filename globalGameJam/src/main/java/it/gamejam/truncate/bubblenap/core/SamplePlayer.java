@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -17,8 +18,6 @@ import it.gamejam.truncate.bubblenap.ui.audio.SimpleAudioPlayer;
 import it.gamejam.truncate.bubblenap.ui.audio.SoundProvider;
 
 public class SamplePlayer {
-
-	private static final int SPEED_RATIO = 50;
 
 	public static void main(String[] args) {
 		SamplePlayer player = new SamplePlayer();
@@ -33,6 +32,10 @@ public class SamplePlayer {
 	private List<int[]> points;
 
 	private Random random = new Random();
+
+	private Map<String, byte[]> audioSamples;
+
+	private Level level;
 
 	private List<double[]> findTangentPoints(double circleX, double circleY, double radius, double pointX,
 			double pointY) {
@@ -99,9 +102,12 @@ public class SamplePlayer {
 	public void loadLevel(int levelNumber) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			Level level = mapper.readValue(new File("resources/levels/level_" + levelNumber + ".json"), Level.class);
+			level = mapper.readValue(new File("resources/levels/" + levelNumber + "/level_" + levelNumber + ".json"),
+					Level.class);
 			samples = level.getEntities();
 			samples.forEach(s -> s.setup(level.getBpm()));
+			audioSamples = SoundProvider.getSamples(new File("resources/levels/" + levelNumber));
+			System.out.println();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -110,15 +116,24 @@ public class SamplePlayer {
 	private void playSample(Sample sample) {
 		System.err.println(sample.getStartTime());
 		if (gameManager != null) {
+			new Thread() {
+				@Override
+				public void run() {
+					SimpleAudioPlayer.playSyncSoundOnce(audioSamples.get("sample_" + sample.getId() + ".wav"), 3f);
+				};
+			}.start();
 			int[] p = points.get(random.nextInt(points.size()));
 			double[] ds = findTangentPoints(gameManager.getBubble().getX(), gameManager.getBubble().getY(),
 					gameManager.getBubble().getRadius(), p[0], p[1]).get(random.nextInt(2));
 
 			double dx = ds[0] - p[0];
 			double dy = ds[1] - p[1];
-			dx /= SPEED_RATIO;
-			dy /= SPEED_RATIO;
-			gameManager.addMovingObject(new Mosquito(p[0], p[1], dx, dy));
+			double distance = Math.sqrt(dx * dx + dy * dy);
+			double speed = distance / (sample.getEndTime() - sample.getStartTime());
+			double ddx = dx / distance * speed;
+			double ddy = dy / distance * speed;
+			gameManager.addMovingObject(new Mosquito(p[0], p[1], ddx, ddy));
+
 		}
 	}
 
@@ -138,7 +153,7 @@ public class SamplePlayer {
 			@Override
 			public void run() {
 				try {
-					new SimpleAudioPlayer(SoundProvider.getGGJTestBase(), 3f).playLoop();
+					new SimpleAudioPlayer(audioSamples.get(level.getBase()), 3f).playLoop();
 				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -146,7 +161,7 @@ public class SamplePlayer {
 
 				while (!samples.isEmpty()) {
 					long current = System.currentTimeMillis();
-					System.out.println(current - start);
+//					System.out.println(current - start);
 					if (current - start >= samples.get(0).getStartTime()) {
 						playSample(samples.remove(0));
 					}

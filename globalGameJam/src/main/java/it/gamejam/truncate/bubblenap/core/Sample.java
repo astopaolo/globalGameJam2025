@@ -2,6 +2,7 @@ package it.gamejam.truncate.bubblenap.core;
 
 public class Sample implements Comparable<Sample> {
 	private long startTime;
+	private long endTime;
 	private int id;
 	private int startMeasure;
 	private int startSub;
@@ -28,6 +29,10 @@ public class Sample implements Comparable<Sample> {
 
 	public int getEndSub() {
 		return endSub;
+	}
+
+	public long getEndTime() {
+		return endTime;
 	}
 
 	public int getId() {
@@ -58,6 +63,10 @@ public class Sample implements Comparable<Sample> {
 		this.endSub = endSub;
 	}
 
+	public void setEndTime(long endTime) {
+		this.endTime = endTime;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -81,5 +90,7 @@ public class Sample implements Comparable<Sample> {
 	public void setup(int bpm) {
 		double x = 60.0 / bpm;
 		startTime = (long) ((startMeasure * x * 4 + startSub * x / 2) * 1000);
+		endTime = (long) ((endMeasure * x * 4 + endSub * x / 2) * 1000);
 	}
+
 }

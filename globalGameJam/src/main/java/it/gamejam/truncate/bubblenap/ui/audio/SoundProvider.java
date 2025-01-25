@@ -3,8 +3,8 @@ package it.gamejam.truncate.bubblenap.ui.audio;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SoundProvider {
 	private static byte[] menu;
@@ -45,10 +45,6 @@ public class SoundProvider {
 		return bubbleMenuClick;
 	}
 
-	public static byte[] getMenu() {
-		return menu;
-	}
-
 	public static byte[] getGGJTestBase() {
 		return ggj_test_base;
 	}
@@ -57,14 +53,18 @@ public class SoundProvider {
 		return ggj_test_sample_1;
 	}
 
-	public static List<byte[]> getSamples(final File dir) throws IOException {
-		final List<byte[]> samples = new ArrayList<>();
+	public static byte[] getMenu() {
+		return menu;
+	}
+
+	public static Map<String, byte[]> getSamples(final File dir) throws IOException {
+		final Map<String, byte[]> samples = new HashMap<>();
 		final File[] sampleFiles = dir.listFiles();
 		for (final File file : sampleFiles) {
 			try (FileInputStream fis = new FileInputStream(file)) {
 				final byte[] tmp = new byte[fis.available()];
 				fis.read(tmp);
-				samples.add(tmp);
+				samples.put(file.getName(), tmp);
 			}
 		}
 		return samples;
