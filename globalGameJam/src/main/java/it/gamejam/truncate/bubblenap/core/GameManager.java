@@ -26,9 +26,11 @@ public class GameManager {
 	private AtomicBoolean gameOver = new AtomicBoolean(false);
 
 	private int level = 1;
+	private long points = 0;
+	private long deathTimer = 0;
 
 	public GameManager() {
-		setBubble(new Bubble(100.0, 500, 500, 50.0, 160.0));
+		setBubble(new Bubble(100.0, 580, 370, 50.0, 160.0));
 	}
 
 	public void addMovingObject(MovingObject mo) {
@@ -76,6 +78,8 @@ public class GameManager {
 //		startSound();
 		running.set(true);
 		gameOver.set(false);
+		points = 0;
+		deathTimer = 15_000;
 		long rate = 1000 / 100;
 		Runnable updater = new Runnable() {
 
@@ -96,6 +100,8 @@ public class GameManager {
 					});
 					repaintable.update();
 					last += elapsed;
+					points += elapsed;
+					deathTimer -= elapsed;
 					try {
 						Thread.sleep(rate);
 					} catch (InterruptedException e) {

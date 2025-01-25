@@ -32,6 +32,8 @@ public class ImageLoader {
 	private static Image mosquito;
 
 	private static Image gameover;
+	private static Image gameScreen;
+	private static Image bollaMuco;
 
 	static {
 		try {
@@ -69,11 +71,19 @@ public class ImageLoader {
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/menu/Back_Pressed.png"));
 			gameover = ImageIO
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/gameover.png"));
+			bollaMuco = ImageIO
+					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/bolla_muco.png"));
+			gameScreen = ImageIO
+					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/GameScreen.png"));
 
 		} catch (final IOException e) {
 
 			e.printStackTrace();
 		}
+	}
+
+	public static Image getBollaMuco() {
+		return bollaMuco;
 	}
 
 	public static Image getCreditsBed() {
@@ -82,6 +92,10 @@ public class ImageLoader {
 
 	public static Image getGameover() {
 		return gameover;
+	}
+
+	public static Image getGameScreen() {
+		return gameScreen;
 	}
 
 	public static Image getImageBack() {

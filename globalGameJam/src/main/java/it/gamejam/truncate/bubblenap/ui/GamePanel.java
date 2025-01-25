@@ -21,7 +21,7 @@ public class GamePanel extends JPanel implements Repaintable {
 		this.gameManager = gameManager;
 		this.bubble = gameManager.getBubble();
 		setPreferredSize(new Dimension(1200, 800));
-		setBackground(Color.WHITE);
+		setBackground(Color.DARK_GRAY);
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(final KeyEvent e) {
@@ -43,6 +43,21 @@ public class GamePanel extends JPanel implements Repaintable {
 		});
 	}
 
+	@Override
+	protected void paintComponent(final Graphics g) {
+//		System.out.println("GamePanel.paintComponent() " + bubble.getRadius());
+		super.paintComponent(g);
+		g.drawImage(ImageLoader.getGameScreen(), 0, 0, getWidth(), getHeight(), null);
+		g.drawImage(ImageLoader.getBollaMuco(), bubble.getX() - (int) bubble.getRadius(),
+				bubble.getY() - (int) bubble.getRadius(), (int) bubble.getRadius() * 2, (int) bubble.getRadius() * 2,
+				null);
+		gameManager.getObjects().forEach(o -> g.drawImage(o.getTransformedImage(), o.getX(), o.getY(), null));
+
+		if (gameManager.isGameOver()) {
+			g.drawImage(ImageLoader.getGameover(), 0, 0, getWidth(), getHeight(), null);
+		}
+	}
+
 	public void startGame() {
 		gameManager.startGame();
 	}
@@ -50,19 +65,6 @@ public class GamePanel extends JPanel implements Repaintable {
 	@Override
 	public void update() {
 		repaint();
-	}
-
-	@Override
-	protected void paintComponent(final Graphics g) {
-//		System.out.println("GamePanel.paintComponent() " + bubble.getRadius());
-		super.paintComponent(g);
-		g.fillOval(bubble.getX() - (int) bubble.getRadius(), bubble.getY() - (int) bubble.getRadius(),
-				(int) bubble.getRadius() * 2, (int) bubble.getRadius() * 2);
-		gameManager.getObjects().forEach(o -> g.drawImage(o.getTransformedImage(), o.getX(), o.getY(), null));
-
-		if (gameManager.isGameOver()) {
-			g.drawImage(ImageLoader.getGameover(), 0, 0, getWidth(), getHeight(), null);
-		}
 	}
 
 }
