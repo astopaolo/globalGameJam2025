@@ -1,0 +1,18 @@
+{
+   "base":"ggj_test_base.wav",
+   "bpm":150,
+   "pitches":[
+      261.63,
+      392.0
+   ],
+   "entities":[
+      {
+         "id":0,
+         "startMeasure":0,
+         "startSub":5,
+         "endMeasure":2,
+         "endSub":0,
+         "pitchIndex":0
+      }
+   ]
+}
