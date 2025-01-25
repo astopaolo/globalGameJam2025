@@ -31,6 +31,8 @@ public class ImageLoader {
 
 	private static Image mosquito;
 
+	private static Image gameover;
+
 	static {
 		try {
 
@@ -65,6 +67,8 @@ public class ImageLoader {
 
 			backPressed = ImageIO
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/menu/Back_Pressed.png"));
+			gameover = ImageIO
+					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/gameover.png"));
 
 		} catch (final IOException e) {
 
@@ -74,6 +78,10 @@ public class ImageLoader {
 
 	public static Image getCreditsBed() {
 		return creditsBed;
+	}
+
+	public static Image getGameover() {
+		return gameover;
 	}
 
 	public static Image getImageBack() {

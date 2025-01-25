@@ -23,6 +23,7 @@ public class GameManager {
 	private final float UPPER = 500;
 
 	private AtomicBoolean running = new AtomicBoolean(false);
+	private AtomicBoolean gameOver = new AtomicBoolean(false);
 
 	private int level = 1;
 
@@ -41,8 +42,10 @@ public class GameManager {
 		return bubble.getRadius() + (d * 69);
 	}
 
-	protected void gameOver() {
+	private void gameOver() {
 		System.out.println("GameManager.gameOver()");
+		running.set(false);
+		gameOver.set(true);
 	}
 
 	public Bubble getBubble() {
@@ -57,6 +60,10 @@ public class GameManager {
 		return repaintable;
 	}
 
+	public boolean isGameOver() {
+		return gameOver.get();
+	}
+
 	public void setBubble(final Bubble bubble) {
 		this.bubble = bubble;
 	}
@@ -68,6 +75,7 @@ public class GameManager {
 	public void startGame() {
 //		startSound();
 		running.set(true);
+		gameOver.set(false);
 		long rate = 1000 / 100;
 		Runnable updater = new Runnable() {
 

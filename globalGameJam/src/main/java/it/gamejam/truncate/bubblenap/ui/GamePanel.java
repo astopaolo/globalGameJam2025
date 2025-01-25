@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import it.gamejam.truncate.bubblenap.core.Bubble;
 import it.gamejam.truncate.bubblenap.core.GameManager;
+import it.gamejam.truncate.bubblenap.ui.img.ImageLoader;
 
 public class GamePanel extends JPanel implements Repaintable {
 	private static final long serialVersionUID = 1L;
@@ -49,6 +50,9 @@ public class GamePanel extends JPanel implements Repaintable {
 		g.fillOval(bubble.getX() - (int) bubble.getRadius(), bubble.getY() - (int) bubble.getRadius(),
 				(int) bubble.getRadius() * 2, (int) bubble.getRadius() * 2);
 		gameManager.getObjects().forEach(o -> g.drawImage(o.getImage(), o.getX(), o.getY(), null));
+		if (gameManager.isGameOver()) {
+			g.drawImage(ImageLoader.getGameover(), 0, 0, getWidth(), getHeight(), null);
+		}
 	}
 
 	public void startGame() {
