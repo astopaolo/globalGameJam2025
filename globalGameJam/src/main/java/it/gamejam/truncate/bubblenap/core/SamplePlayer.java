@@ -181,7 +181,7 @@ public class SamplePlayer {
 
 			System.err.println(Math.atan(dx / distance));
 
-			gameManager.addMovingObject(new Mosquito(p[0], p[1], ddx, ddy, Math.atan(dx / distance)));
+			gameManager.addMovingObject(new Mosquito(p[0], p[1], ddx, ddy, ds[0], ds[1]));
 
 		}
 	}

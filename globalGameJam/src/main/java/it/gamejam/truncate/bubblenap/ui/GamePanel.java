@@ -62,28 +62,38 @@ public class GamePanel extends JPanel implements Repaintable {
 				(int) bubble.getRadius() * 2, (int) bubble.getRadius() * 2);
 		gameManager.getObjects().forEach(o -> {
 
-			Graphics2D g2d = (Graphics2D) g;
+			g.fillRect(o.getX(), o.getY(), 10, 10);
+
+			Graphics2D g2d = (Graphics2D) o.getImage().getGraphics();
 
 			// Make a backup so that we can reset our graphics object after using it.
-			AffineTransform backup = g2d.getTransform();
-			// rx is the x coordinate for rotation, ry is the y coordinate for rotation, and
-			// angle
-			// is the angle to rotate the image. If you want to rotate around the center of
-			// an image,
-			// use the image's center x and y coordinates for rx and ry.
-			AffineTransform a = AffineTransform.getRotateInstance(45, o.getWidth() / 2.0, o.getHeight() / 2.0);
-			// Set our Graphics2D object to the transform
-			g2d.setTransform(a);
-			// Draw our image like normal
+			// AffineTransform backup = g2d.getTransform();
+
+			int imageWidth = o.getImage().getWidth(null);
+			int imageHeight = o.getImage().getHeight(null);
+
+			// Center of the image
+			int imageCenterX = imageWidth / 2;
+			int imageCenterY = imageHeight / 2;
+
+			// Create an AffineTransform for rotation
+			AffineTransform transform = new AffineTransform();
+			// Translate to the center of the image
+			transform.translate(imageCenterX, imageCenterY);
+
+//			double angle = Math.atan2(o.getTargetY() - imageCenterY, o.getTargetX() - imageCenterX);
+			double angle = Math.PI;
+
+			// Rotate around the center
+			transform.rotate(angle);
+			// Translate back to draw the image properly
+			// transform.translate(-imageWidth / 2, -imageHeight / 2);
+			g2d.setTransform(transform);
+			// Draw the rotated image
+
 			g2d.drawImage(o.getImage(), o.getX(), o.getY(), null);
-			// Reset our graphics object so we can draw with it again.
-			g2d.setTransform(backup);
 
-			// g2d.rotate(o.getRotationAngle(), o.getWidth() / 2, o.getHeight() / 2);
-
-			// g2d.drawImage(o.getImage(), (o.getX() - o.getWidth()) / 2, (o.getY() -
-			// o.getHeight()) / 2, null);
-
+			g2d.dispose();
 		});
 
 		if (gameManager.isGameOver()) {

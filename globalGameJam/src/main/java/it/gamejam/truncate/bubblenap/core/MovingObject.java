@@ -11,18 +11,24 @@ public class MovingObject {
 	private double dx;
 	private double dy;
 	private Image image;
+	private double targetX;
+	private double targetY;
 
-	public MovingObject(int x, int y, int width, int height, double dx, double dy) {
+	public MovingObject(final int x, final int y, final int width, final int height, final double dx, final double dy,
+			final double targetX, final double targetY) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.dx = dx;
 		this.dy = dy;
+		this.setTargetX(targetX);
+		this.setTargetY(targetY);
 	}
 
-	public boolean collide(Bubble bubble) {
-		double d = Math.sqrt(Math.pow(bubble.getX() - width / 2 - x, 2) + Math.pow(bubble.getY() - height / 2 - y, 2));
+	public boolean collide(final Bubble bubble) {
+		double d = Math
+				.sqrt(Math.pow(bubble.getX() - (width / 2) - x, 2) + Math.pow(bubble.getY() - (height / 2) - y, 2));
 		return d <= bubble.getRadius();
 	}
 
@@ -42,6 +48,14 @@ public class MovingObject {
 		return image;
 	}
 
+	public double getTargetX() {
+		return targetX;
+	}
+
+	public double getTargetY() {
+		return targetY;
+	}
+
 	public int getWidth() {
 		return width;
 	}
@@ -54,35 +68,43 @@ public class MovingObject {
 		return (int) y;
 	}
 
-	public void setDx(double dx) {
+	public void setDx(final double dx) {
 		this.dx = dx;
 	}
 
-	public void setDy(double dy) {
+	public void setDy(final double dy) {
 		this.dy = dy;
 	}
 
-	public void setHeight(int height) {
+	public void setHeight(final int height) {
 		this.height = height;
 	}
 
-	public void setImage(Image image) {
+	public void setImage(final Image image) {
 		this.image = image;
 	}
 
-	public void setWidth(int width) {
+	public void setTargetX(final double targetX) {
+		this.targetX = targetX;
+	}
+
+	public void setTargetY(final double targetY) {
+		this.targetY = targetY;
+	}
+
+	public void setWidth(final int width) {
 		this.width = width;
 	}
 
-	public void setX(int x) {
+	public void setX(final int x) {
 		this.x = x;
 	}
 
-	public void setY(int y) {
+	public void setY(final int y) {
 		this.y = y;
 	}
 
-	public void updatePosition(long elapsed) {
+	public void updatePosition(final long elapsed) {
 		x += dx * elapsed * 1.6;
 		y += dy * elapsed * 1.6;
 	}
