@@ -28,8 +28,14 @@ public class ImageLoader {
 
 	private static Image playBackPressed;
 	private static Image playBackRed;
+
+	private static Image mosquito;
+
 	static {
 		try {
+
+			mosquito = ImageIO
+					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/mosquito.png"));
 
 			creditsBed = ImageIO
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/menu/CreditsBed.png"));
@@ -64,6 +70,10 @@ public class ImageLoader {
 
 			e.printStackTrace();
 		}
+	}
+
+	public static Image getCreditsBed() {
+		return creditsBed;
 	}
 
 	public static Image getImageBack() {
@@ -111,16 +121,16 @@ public class ImageLoader {
 		return titleImage;
 	}
 
+	public static Image getMosquito() {
+		return mosquito;
+	}
+
 	public static Image getPlayBackPressed() {
 		return playBackPressed;
 	}
 
 	public static Image getPlayBackWhite() {
 		return playBackRed;
-	}
-
-	public static Image getCreditsBed() {
-		return creditsBed;
 	}
 
 }
