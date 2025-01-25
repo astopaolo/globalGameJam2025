@@ -18,7 +18,7 @@ public class GameManager {
 	private Repaintable repaintable;
 	private List<MovingObject> objects = new CopyOnWriteArrayList<>();
 
-	private final float LOWER = 100;
+	private final float LOWER = 30;
 
 	private final float UPPER = 500;
 
@@ -29,6 +29,24 @@ public class GameManager {
 	private long points = 0;
 	private long deathTimer = 0;
 
+	private double minFrequency = 0;
+
+	public void setMinFrequency(double minFrequency) {
+		this.minFrequency = minFrequency;
+		if (bubble != null) {
+			bubble.setMinFrequency(minFrequency);
+		}
+	}
+
+	private double maxFrequency = 0;
+
+	public void setMaxFrequency(double maxFrequency) {
+		this.maxFrequency = maxFrequency;
+		if (bubble != null) {
+			bubble.setMaxFrequency(maxFrequency);
+		}
+	}
+
 	public GameManager() {
 		setBubble(new Bubble(100.0, 578, 380, 50.0, 160.0));
 	}
@@ -38,10 +56,24 @@ public class GameManager {
 	}
 
 	private double computeRadius(final List<Float> samples) {
-		double d = ((samples.getLast() - LOWER) / (UPPER - LOWER)) - 0.5;
+//		double d = ((samples.getLast() - LOWER) / (UPPER - LOWER)) - 0.5;
 //		double d = (samples.stream().mapToDouble(f -> f).average().getAsDouble() - LOWER) / UPPER - 1;
-		System.out.println(d);
-		return bubble.getRadius() + (d * 69);
+
+		final double lastSample = Math.min(Math.max(LOWER, samples.getLast()), UPPER);
+		double d = ((samples.getLast() - LOWER) / (UPPER - LOWER)) - 0.5;
+
+//		final double retVal = ((lastSample - bubble.getMinFrequency()) * (bubble.getMaxRadius() - bubble.getMinRadius())
+//				/ (bubble.getMaxFrequency() - bubble.getMinFrequency())) + bubble.getMinRadius();
+		final double retVal = lastSample + (d * 15);
+
+		System.out.println("min f: " + bubble.getMinFrequency());
+		System.out.println("max f: " + bubble.getMaxFrequency());
+		System.out.println("samples.getLast(): " + samples.getLast());
+		System.out.println("lastSample: " + lastSample);
+		System.out.println("retVAl: " + retVal);
+
+//		double retVal = Math.max(bubble.getMinRadius(), Math.min(bubble.getMaxRadius(), bubble.getRadius() + (d * 69)));
+		return retVal;
 	}
 
 	private void gameOver() {
@@ -75,7 +107,7 @@ public class GameManager {
 	}
 
 	public void startGame() {
-//		startSound();
+		startSound();
 		running.set(true);
 		gameOver.set(false);
 		points = 0;
@@ -148,9 +180,11 @@ public class GameManager {
 					if (samples.size() > 3) {
 						samples.remove(0);
 					}
+					System.out.println("############################");
+					System.out.println("detected pitch: " + pitchDetectionResult.getPitch());
 					bubble.setRadius(computeRadius(samples));
 					repaintable.update();
-					System.out.println("Detected pitch: " + pitch + " Hz");
+					System.out.println();
 				}
 			};
 

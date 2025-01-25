@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -31,36 +32,32 @@ public class SamplePlayer {
 
 	private double[] radiusArray;
 
-	public List<Sample> getSamples() {
-		return samples;
-	}
-
-	public void loadLevel(final int levelNumber) {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			level = mapper.readValue(new File("resources/levels/" + levelNumber + "/level_" + levelNumber + ".json"),
-					Level.class);
-			samples = level.getEntities();
-			samples.forEach(s -> s.setup(level.getBpm()));
-			audioSamples = SoundProvider.getSamples(new File("resources/levels/" + levelNumber));
-			double[] pitches = level.getPitches();
-
-			radiusArray = new double[pitches.length];
-
-			radiusArray[0] = gameManager.getBubble().getMinRadius();
-			radiusArray[pitches.length - 1] = gameManager.getBubble().getMaxRadius();
-
-			double deltaRadius = gameManager.getBubble().getMaxRadius() - gameManager.getBubble().getMinRadius();
-			double radiusStep = deltaRadius / pitches.length;
-
-			for (int i = 1; i < (pitches.length - 1); ++i) {
-				radiusArray[i] = gameManager.getBubble().getMinRadius() + (radiusStep * i);
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+//	public void loadLevel(final int levelNumber) {
+//		ObjectMapper mapper = new ObjectMapper();
+//		try {
+//			level = mapper.readValue(new File("resources/levels/" + levelNumber + "/level_" + levelNumber + ".json"),
+//					Level.class);
+//			samples = level.getEntities();
+//			samples.forEach(s -> s.setup(level.getBpm()));
+//			audioSamples = SoundProvider.getSamples(new File("resources/levels/" + levelNumber));
+//			double[] pitches = level.getPitches();
+//
+//			radiusArray = new double[pitches.length];
+//
+//			radiusArray[0] = gameManager.getBubble().getMinRadius();
+//			radiusArray[pitches.length - 1] = gameManager.getBubble().getMaxRadius();
+//
+//			double deltaRadius = gameManager.getBubble().getMaxRadius() - gameManager.getBubble().getMinRadius();
+//			double radiusStep = deltaRadius / pitches.length;
+//
+//			for (int i = 1; i < (pitches.length - 1); ++i) {
+//				radiusArray[i] = gameManager.getBubble().getMinRadius() + (radiusStep * i);
+//			}
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	public void setGameManager(final GameManager gameManager) {
 		this.gameManager = gameManager;
@@ -159,7 +156,68 @@ public class SamplePlayer {
 		return validPoints;
 	}
 
-	private void playSample(final Sample sample) {
+	public List<Sample> getSamples() {
+		return samples;
+	}
+
+	private List<Sample> generateRandomEntites(
+			final int howManyEntitesWouldYouLikeMeToGenerateExactlyPleaseTellMeSoThatICanFulfillYourRequestOk,
+			final int maxPitchIndex) {
+		final List<Sample> entities = new LinkedList<>();
+
+		for (int i = 0; i < howManyEntitesWouldYouLikeMeToGenerateExactlyPleaseTellMeSoThatICanFulfillYourRequestOk; i++) {
+			final int id = (int) (Math.random() + 0.5);
+			final int startMeasure = 0;
+			final Sample sample = new Sample();
+			sample.setId(id);
+			sample.setStartMeasure(startMeasure);
+			sample.setStartSub(6);
+			sample.setEndMeasure(2 - id);
+			sample.setEndSub(2 * id);
+			sample.setPitchIndex(new Random().nextInt(maxPitchIndex + 1));
+
+			entities.add(sample);
+		}
+
+		return entities;
+	}
+
+	public void loadLevel(int levelNumber) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			level = mapper.readValue(new File("resources/levels/" + levelNumber + "/level_" + levelNumber + ".json"),
+					Level.class);
+
+			double[] pitches = level.getPitches();
+
+//			samples = level.getEntities();
+			samples = generateRandomEntites(50, pitches.length);
+			samples.forEach(s -> s.setup(level.getBpm()));
+			audioSamples = SoundProvider.getSamples(new File("resources/levels/" + levelNumber));
+
+//			double[] pitches = Arrays.stream(level.getPitches()).map(e -> 2 * e).toArray();
+
+			gameManager.setMinFrequency(pitches[0]);
+			gameManager.setMaxFrequency(pitches[pitches.length - 1]);
+
+			radiusArray = new double[pitches.length];
+
+			radiusArray[0] = gameManager.getBubble().getMinRadius();
+			radiusArray[pitches.length - 1] = gameManager.getBubble().getMaxRadius();
+
+			double deltaRadius = gameManager.getBubble().getMaxRadius() - gameManager.getBubble().getMinRadius();
+			double radiusStep = deltaRadius / pitches.length;
+
+			for (int i = 1; i < pitches.length - 1; ++i) {
+				radiusArray[i] = gameManager.getBubble().getMinRadius() + radiusStep * i;
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void playSample(Sample sample) {
 		System.err.println(sample.getStartTime());
 		if (gameManager != null) {
 			new Thread() {
