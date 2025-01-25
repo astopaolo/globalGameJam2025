@@ -23,14 +23,14 @@ public class MenuPanel extends JPanel {
 
 	private static Image Background = ImageLoader.getImageBackground();
 
-	private static int PLAY_BUTTON_X = 600;
-	private static int PLAY_BUTTON_Y = 100;
+	private static int PLAY_BUTTON_X = 840;
+	private static int PLAY_BUTTON_Y = 300;
 
 	private static int CREDITS_X = PLAY_BUTTON_X - 40;
-	private static int CREDITS_Y = 250;
+	private static int CREDITS_Y = PLAY_BUTTON_Y + 150;
 
 	private static int EXIT_X = PLAY_BUTTON_X;
-	private static int EXIT_Y = 400;
+	private static int EXIT_Y = PLAY_BUTTON_Y + 300;
 
 	MainFrame frame;
 
@@ -131,7 +131,7 @@ public class MenuPanel extends JPanel {
 		g.drawImage(playButtonImage, PLAY_BUTTON_X, PLAY_BUTTON_Y, 330, 83, null);
 		g.drawImage(ExitButtonImage, EXIT_X, EXIT_Y, 330, 83, null);
 
-		g.drawImage(titleImage, 0, 0, titleImage.getWidth(this), this.getHeight() - 10, null);
+		g.drawImage(titleImage, 130, 0, null);
 
 	}
 }
