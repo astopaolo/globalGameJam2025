@@ -48,6 +48,7 @@ public class GamePanel extends JPanel implements Repaintable {
 //		System.out.println("GamePanel.paintComponent() " + bubble.getRadius());
 		super.paintComponent(g);
 		g.drawImage(ImageLoader.getGameScreen(), 0, 0, getWidth(), getHeight(), null);
+//		g.drawImage(ImageLoader.getBollaMuco(), bubble.getX() - 10, bubble.getY() - 10, 20, 20, null);
 		g.drawImage(ImageLoader.getBollaMuco(), bubble.getX() - (int) bubble.getRadius(),
 				bubble.getY() - (int) bubble.getRadius(), (int) bubble.getRadius() * 2, (int) bubble.getRadius() * 2,
 				null);

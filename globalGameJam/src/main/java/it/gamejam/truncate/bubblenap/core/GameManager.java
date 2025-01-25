@@ -30,7 +30,7 @@ public class GameManager {
 	private long deathTimer = 0;
 
 	public GameManager() {
-		setBubble(new Bubble(100.0, 580, 370, 50.0, 160.0));
+		setBubble(new Bubble(100.0, 578, 380, 50.0, 160.0));
 	}
 
 	public void addMovingObject(MovingObject mo) {
