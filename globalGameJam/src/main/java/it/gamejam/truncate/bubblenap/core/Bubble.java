@@ -5,12 +5,16 @@ public class Bubble {
 	private double radius = 100;
 	private int x;
 	private int y;
+	private double minRadius;
+	private double maxRadius;
 
-	public Bubble(double radius, int x, int y) {
+	public Bubble(double radius, int x, int y, double minRadius, double maxRadius) {
 		super();
 		this.radius = radius;
 		this.x = x;
 		this.y = y;
+		this.minRadius = minRadius;
+		this.maxRadius = maxRadius;
 	}
 
 	public double getRadius() {
@@ -24,6 +28,22 @@ public class Bubble {
 	public int getY() {
 		return y;
 	}
+	
+	public double getMinRadius() {
+		return minRadius;
+	}
+	
+	public double getMaxRadius() {
+		return maxRadius;
+	}
+	
+	public void setMinRadius(double minRadius) {
+		this.minRadius = minRadius;
+	}
+
+	public void setMaxRadius(double maxRadius) {
+		this.maxRadius = maxRadius;
+	}
 
 	public void setRadius(double radius) {
 		this.radius = radius;
@@ -36,4 +56,6 @@ public class Bubble {
 	public void setY(int y) {
 		this.y = y;
 	}
+	
+	
 }
