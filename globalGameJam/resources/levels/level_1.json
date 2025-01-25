@@ -1,18 +1,45 @@
 {
-   "base":"ggj_test_base.wav",
-   "bpm":150,
-   "pitches":[
-      261.63,
-      392.0
+   "base": "level_1_base.wav",
+   "bpm": 150,
+   "pitches": [
+      207.65,
+      233.08,
+      246.94,
+      277.18,
+      311.13
    ],
-   "entities":[
+   "entities": [
       {
-         "id":0,
-         "startMeasure":0,
-         "startSub":5,
-         "endMeasure":2,
-         "endSub":0,
-         "pitchIndex":0
+         "id": 0,
+         "startMeasure": 3,
+         "startSub": 6,
+         "endMeasure": 5,
+         "endSub": 0,
+         "pitchIndex": 4
+      },
+      {
+         "id": 1,
+         "startMeasure": 7,
+         "startSub": 6,
+         "endMeasure": 8,
+         "endSub": 2,
+         "pitchIndex": 3
+      },
+      {
+         "id": 0,
+         "startMeasure": 11,
+         "startSub": 6,
+         "endMeasure": 13,
+         "endSub": 0,
+         "pitchIndex": 4
+      },
+      {
+         "id": 1,
+         "startMeasure": 15,
+         "startSub": 6,
+         "endMeasure": 8,
+         "endSub": 2,
+         "pitchIndex": 3
       }
    ]
 }
