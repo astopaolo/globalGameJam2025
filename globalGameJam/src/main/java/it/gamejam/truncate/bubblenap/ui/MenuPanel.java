@@ -49,7 +49,7 @@ public class MenuPanel extends JPanel {
 				if ((e.getX() >= EXIT_X) && (e.getX() <= (EXIT_X + ImageLoader.getImageExit().getWidth(null)))
 						&& (e.getY() >= EXIT_Y)
 						&& (e.getY() <= (EXIT_Y + ImageLoader.getImageExit().getHeight(null)))) {
-					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getMorseMenu(), 0f);
+					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getBubbleMenuClick(), 0f);
 
 					System.exit(0);
 				}
@@ -57,7 +57,7 @@ public class MenuPanel extends JPanel {
 						&& (e.getX() <= (PLAY_BUTTON_X + ImageLoader.getImagePlay().getWidth(null)))
 						&& (e.getY() >= PLAY_BUTTON_Y)
 						&& (e.getY() <= (PLAY_BUTTON_Y + ImageLoader.getImagePlay().getHeight(null)))) {
-					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getMorseMenu(), 0f);
+					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getBubbleMenuClick(), 0f);
 
 					frame.getBackgroundMusic().stop();
 					frame.drawPanel(EnumPanel.GAME_PANEL);
@@ -65,7 +65,7 @@ public class MenuPanel extends JPanel {
 				if ((e.getX() >= CREDITS_X) && (e.getX() <= (CREDITS_X + ImageLoader.getImagePlay().getWidth(null)))
 						&& (e.getY() >= CREDITS_Y)
 						&& (e.getY() <= (CREDITS_Y + ImageLoader.getImagePlay().getHeight(null)))) {
-					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getMorseMenu(), 0f);
+					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getBubbleMenuClick(), 0f);
 					frame.drawPanel(EnumPanel.CREDITS_MENU_PANEL);
 				}
 
@@ -131,7 +131,7 @@ public class MenuPanel extends JPanel {
 		g.drawImage(playButtonImage, PLAY_BUTTON_X, PLAY_BUTTON_Y, 330, 83, null);
 		g.drawImage(ExitButtonImage, EXIT_X, EXIT_Y, 330, 83, null);
 
-		g.drawImage(titleImage, 0, 0, titleImage.getWidth(this), this.getHeight() - 70, null);
+		g.drawImage(titleImage, 0, 0, titleImage.getWidth(this), this.getHeight() - 10, null);
 
 	}
 }

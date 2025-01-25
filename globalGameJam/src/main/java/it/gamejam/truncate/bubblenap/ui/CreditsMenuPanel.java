@@ -72,7 +72,7 @@ public class CreditsMenuPanel extends JPanel {
 				if ((e.getX() >= BACK_X) && (e.getX() <= (BACK_X + ImageLoader.getImageBack().getWidth(null)))
 						&& (e.getY() >= BACK_Y)
 						&& (e.getY() <= (BACK_Y + ImageLoader.getImageBack().getHeight(null)))) {
-					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getMorseMenu(), 0f);
+					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getBubbleMenuClick(), 0f);
 
 					frame.drawPanel(EnumPanel.MENU_PANEL);
 				}

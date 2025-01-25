@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SoundProvider {
 	private static byte[] menu;
-	private static byte[] morseMenu;
+	private static byte[] bubbleMenuClick;
 
 	static {
 		try {
@@ -17,9 +17,9 @@ public class SoundProvider {
 				menu = new byte[fis.available()];
 				fis.read(menu);
 			}
-			try (FileInputStream fis = new FileInputStream("resources/audio/MorseMenu.wav")) {
-				morseMenu = new byte[fis.available()];
-				fis.read(morseMenu);
+			try (FileInputStream fis = new FileInputStream("resources/audio/bubbleMenuClick.wav")) {
+				bubbleMenuClick = new byte[fis.available()];
+				fis.read(bubbleMenuClick);
 			}
 
 		} catch (final Exception e) {
@@ -28,12 +28,12 @@ public class SoundProvider {
 		}
 	}
 
-	public static byte[] getMenu() {
-		return menu;
+	public static byte[] getBubbleMenuClick() {
+		return bubbleMenuClick;
 	}
 
-	public static byte[] getMorseMenu() {
-		return morseMenu;
+	public static byte[] getMenu() {
+		return menu;
 	}
 
 	public static List<byte[]> getSamples(final File dir) throws IOException {
