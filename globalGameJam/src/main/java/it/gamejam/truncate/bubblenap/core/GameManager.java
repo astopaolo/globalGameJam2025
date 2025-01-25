@@ -28,7 +28,7 @@ public class GameManager {
 	private int level = 1;
 
 	public GameManager() {
-		setBubble(new Bubble(100.0, 500, 500));
+		setBubble(new Bubble(100.0, 500, 500, 50.0, 160.0));
 	}
 
 	public void addMovingObject(MovingObject mo) {

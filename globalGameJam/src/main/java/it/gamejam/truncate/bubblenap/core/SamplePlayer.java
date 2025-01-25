@@ -36,6 +36,8 @@ public class SamplePlayer {
 	private Map<String, byte[]> audioSamples;
 
 	private Level level;
+	
+	private double[] radiusArray;
 
 	private List<double[]> findTangentPoints(double circleX, double circleY, double radius, double pointX,
 			double pointY) {
@@ -107,7 +109,20 @@ public class SamplePlayer {
 			samples = level.getEntities();
 			samples.forEach(s -> s.setup(level.getBpm()));
 			audioSamples = SoundProvider.getSamples(new File("resources/levels/" + levelNumber));
-			System.out.println();
+			double[] pitches = level.getPitches();
+			
+			radiusArray = new double[pitches.length];
+			
+			radiusArray[0] = gameManager.getBubble().getMinRadius();
+			radiusArray[pitches.length - 1] = gameManager.getBubble().getMaxRadius();
+			
+			double deltaRadius = gameManager.getBubble().getMaxRadius() - gameManager.getBubble().getMinRadius();
+			double radiusStep = deltaRadius / pitches.length;
+			
+			for(int i = 1; i < pitches.length - 1; ++i) {
+				radiusArray[i] = gameManager.getBubble().getMinRadius() + radiusStep * i;
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -121,10 +136,10 @@ public class SamplePlayer {
 				public void run() {
 					SimpleAudioPlayer.playSyncSoundOnce(audioSamples.get("sample_" + sample.getId() + ".wav"), 3f);
 				};
-			}.start();
+			}.start();			
 			int[] p = points.get(random.nextInt(points.size()));
 			double[] ds = findTangentPoints(gameManager.getBubble().getX(), gameManager.getBubble().getY(),
-					gameManager.getBubble().getRadius(), p[0], p[1]).get(random.nextInt(2));
+					radiusArray[sample.getPitchIndex()], p[0], p[1]).get(random.nextInt(2));
 
 			double dx = ds[0] - p[0];
 			double dy = ds[1] - p[1];
