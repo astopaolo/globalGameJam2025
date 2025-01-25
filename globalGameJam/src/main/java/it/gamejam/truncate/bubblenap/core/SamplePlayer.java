@@ -1,18 +1,24 @@
 package it.gamejam.truncate.bubblenap.core;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.gamejam.truncate.bubblenap.ui.audio.SimpleAudioPlayer;
 import it.gamejam.truncate.bubblenap.ui.audio.SoundProvider;
 
 public class SamplePlayer {
+
+	private static final int SPEED_RATIO = 50;
 
 	public static void main(String[] args) {
 		SamplePlayer player = new SamplePlayer();
@@ -23,12 +29,102 @@ public class SamplePlayer {
 
 	private List<Sample> samples;
 
+	private GameManager gameManager;
+	private List<int[]> points;
+
+	private Random random = new Random();
+
+	private List<double[]> findTangentPoints(double circleX, double circleY, double radius, double pointX,
+			double pointY) {
+		List<double[]> tangentPoints = new ArrayList<>();
+
+		// Calcola la distanza dal punto al centro della circonferenza
+		double correction = 2.6;
+		double distance = Math.sqrt(Math.pow(pointX - circleX, 2) + Math.pow(pointY - circleY, 2));
+
+		// Controlla se il punto è esterno alla circonferenza
+		if (distance < radius) {
+			return tangentPoints; // Nessun punto di tangenza
+		}
+
+		// Calcola l'angolo tra il punto e il centro della circonferenza
+		double angleToPoint = Math.atan2(pointY - circleY, pointX - circleX);
+
+		// Calcola l'angolo di offset per i punti di tangenza
+		double offsetAngle = Math.asin(radius / distance);
+
+		// Calcola i due angoli dei punti di tangenza
+		double angle1 = angleToPoint + offsetAngle;
+		double angle2 = angleToPoint - offsetAngle;
+
+		// Calcola le coordinate dei punti di tangenza
+		double tangentX1 = circleX + radius * Math.cos(angle1) * correction;
+		double tangentY1 = circleY + radius * Math.sin(angle1) * correction;
+
+		double tangentX2 = circleX + radius * Math.cos(angle2) * correction;
+		double tangentY2 = circleY + radius * Math.sin(angle2) * correction;
+
+		tangentPoints.add(new double[] { tangentX1, tangentY1 });
+		tangentPoints.add(new double[] { tangentX2, tangentY2 });
+
+		return tangentPoints;
+	}
+
+	private List<int[]> getPointAtDistance(int x, int y, int distance) {
+		List<int[]> validPoints = new ArrayList<>();
+
+		// Genera tutte le combinazioni di punti a distanza fissa
+		for (int dx = -distance; dx <= distance; dx++) {
+			int dySquared = distance * distance - dx * dx;
+			if (dySquared >= 0) {
+				int dy = (int) Math.sqrt(dySquared);
+
+				// Aggiungi entrambe le soluzioni positive e negative per dy
+				if (dy * dy == dySquared) {
+					validPoints.add(new int[] { x + dx, y + dy });
+					if (dy != 0) { // Evita duplicati quando dy = 0
+						validPoints.add(new int[] { x + dx, y - dy });
+					}
+				}
+			}
+		}
+
+		return validPoints;
+	}
+
 	public List<Sample> getSamples() {
 		return samples;
 	}
 
-	protected void playSample(Sample sample) {
+	public void loadLevel(int levelNumber) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			Level level = mapper.readValue(new File("resources/levels/level_" + levelNumber + ".json"), Level.class);
+			samples = level.getEntities();
+			samples.forEach(s -> s.setup(level.getBpm()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void playSample(Sample sample) {
 		System.err.println(sample.getStartTime());
+		if (gameManager != null) {
+			int[] p = points.get(random.nextInt(points.size()));
+			double[] ds = findTangentPoints(gameManager.getBubble().getX(), gameManager.getBubble().getY(),
+					gameManager.getBubble().getRadius(), p[0], p[1]).get(random.nextInt(2));
+
+			double dx = ds[0] - p[0];
+			double dy = ds[1] - p[1];
+			dx /= SPEED_RATIO;
+			dy /= SPEED_RATIO;
+			gameManager.addMovingObject(new Mosquito(p[0], p[1], dx, dy));
+		}
+	}
+
+	public void setGameManager(GameManager gameManager) {
+		this.gameManager = gameManager;
+		points = getPointAtDistance(gameManager.getBubble().getX(), gameManager.getBubble().getY(), 500);
 	}
 
 	public void setSamples(List<Sample> samples) {
@@ -57,7 +153,6 @@ public class SamplePlayer {
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}

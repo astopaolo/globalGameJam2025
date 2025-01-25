@@ -24,8 +24,10 @@ public class GameManager {
 
 	private AtomicBoolean running = new AtomicBoolean(false);
 
+	private int level = 1;
+
 	public GameManager() {
-		setBubble(new Bubble(100.0, 200, 200));
+		setBubble(new Bubble(100.0, 500, 500));
 	}
 
 	public void addMovingObject(MovingObject mo) {
@@ -71,7 +73,6 @@ public class GameManager {
 
 			@Override
 			public void run() {
-				System.out.println("GameManager.startGame()");
 				while (running.get()) {
 					getObjects().forEach(MovingObject::updatePosition);
 					getObjects().forEach(o -> {
@@ -83,14 +84,19 @@ public class GameManager {
 					try {
 						Thread.sleep(rate);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 			}
 		};
 		new Thread(updater).start();
-		addMovingObject(new Mosquito());
+		SamplePlayer player = new SamplePlayer();
+		player.setGameManager(this);
+		player.loadLevel(level++);
+//		player.setSamples(new ArrayList<Sample>(Arrays.asList(new Sample(1000), new Sample(2000), new Sample(3000),
+//				new Sample(4000), new Sample(5000))));
+		player.start();
+
 	}
 
 	private void startSound() {
