@@ -75,7 +75,7 @@ public class MainFrame extends JFrame {
 			this.setContentPane(gamePanel);
 			gamePanel.requestFocus();
 			try {
-				// gamePanel.startGame();
+				gamePanel.startGame();
 			} catch (final Exception e) {
 				e.printStackTrace();
 				System.exit(-1);

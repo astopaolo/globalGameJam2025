@@ -21,11 +21,9 @@ public class GamePanel extends JPanel implements Repaintable {
 		this.bubble = gameManager.getBubble();
 		setPreferredSize(new Dimension(1200, 800));
 		setBackground(Color.WHITE);
-		System.out.println("GamePanel.GamePanel()");
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				System.out.println("GamePanel.GamePanel(...).new KeyAdapter() {...}.keyPressed()");
 				switch (e.getKeyCode()) {
 				case KeyEvent.VK_A: {
 					bubble.setRadius(bubble.getRadius() - 15);
@@ -48,7 +46,13 @@ public class GamePanel extends JPanel implements Repaintable {
 	protected void paintComponent(Graphics g) {
 //		System.out.println("GamePanel.paintComponent() " + bubble.getRadius());
 		super.paintComponent(g);
-		g.fillOval(600, 400, (int) bubble.getRadius(), (int) bubble.getRadius());
+		g.fillOval(bubble.getX() - (int) bubble.getRadius(), bubble.getY() - (int) bubble.getRadius(),
+				(int) bubble.getRadius() * 2, (int) bubble.getRadius() * 2);
+		gameManager.getObjects().forEach(o -> g.drawImage(o.getImage(), o.getX(), o.getY(), null));
+	}
+
+	public void startGame() {
+		gameManager.startGame();
 	}
 
 	@Override
