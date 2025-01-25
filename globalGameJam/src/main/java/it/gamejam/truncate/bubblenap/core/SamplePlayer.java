@@ -1,9 +1,16 @@
 package it.gamejam.truncate.bubblenap.core;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
+import it.gamejam.truncate.bubblenap.ui.audio.SimpleAudioPlayer;
+import it.gamejam.truncate.bubblenap.ui.audio.SoundProvider;
 
 public class SamplePlayer {
 
@@ -34,6 +41,13 @@ public class SamplePlayer {
 		Runnable runnable = new Runnable() {
 			@Override
 			public void run() {
+				try {
+					new SimpleAudioPlayer(SoundProvider.getGGJTestBase(), 3f).playLoop();
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				while (!samples.isEmpty()) {
 					long current = System.currentTimeMillis();
 					System.out.println(current - start);
