@@ -113,7 +113,8 @@ public class SamplePlayer {
 			startMeasure += random.nextInt(3) + 1;
 		}
 
-		return entities;
+//		return entities;
+		return new ArrayList<>();
 	}
 
 	private List<int[]> getPointAtDistance(final int x, final int y, final int distance) {

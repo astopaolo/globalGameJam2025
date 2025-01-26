@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 
 import javax.sound.sampled.LineUnavailableException;
 
@@ -59,16 +60,20 @@ public class GameManager {
 //		double d = ((samples.getLast() - LOWER) / (UPPER - LOWER)) - 0.5;
 //		double d = (samples.stream().mapToDouble(f -> f).average().getAsDouble() - LOWER) / UPPER - 1;
 
-		final double lastSample = Math.min(Math.max(LOWER, samples.getLast()), UPPER);
-		double d = ((samples.getLast() - LOWER) / (UPPER - LOWER)) - 0.5;
+//		final double lastSample = Math.min(Math.max(LOWER, samples.getLast()), UPPER);
+		final double avg = samples.stream().mapToDouble(e -> e).average().orElse(0);
+		final double lastSample = Math.min(Math.max(LOWER, avg), UPPER);
+//		double d = ((samples.getLast() - LOWER) / (UPPER - LOWER)) - 0.5;
+		double d = ((avg - LOWER) / (UPPER - LOWER)) - 0.5;
 
 //		final double retVal = ((lastSample - bubble.getMinFrequency()) * (bubble.getMaxRadius() - bubble.getMinRadius())
 //				/ (bubble.getMaxFrequency() - bubble.getMinFrequency())) + bubble.getMinRadius();
-		final double retVal = lastSample + (d * 15);
+		final double retVal = lastSample + (d * 30);
 
 		System.out.println("min f: " + bubble.getMinFrequency());
 		System.out.println("max f: " + bubble.getMaxFrequency());
 		System.out.println("samples.getLast(): " + samples.getLast());
+		System.out.println("avg: " + avg);
 		System.out.println("lastSample: " + lastSample);
 		System.out.println("retVAl: " + retVal);
 
@@ -154,10 +159,14 @@ public class GameManager {
 
 	private void startSound() {
 		// Define the microphone capture parameters
-		int sampleRate = 44100; // Common audio sample rate
+//		int sampleRate = 44100; // Common audio sample rate
+		int sampleRate = 48000; // Common audio sample rate
 		int bufferSize = 2092; // Size of each audio buffer
-		int overlap = 0; // Overlap between buffers
+//		int overlap = 0; // Overlap between buffers
+		int overlap = 100; // Overlap between buffers
+
 		List<Float> samples = new ArrayList<>();
+		int nSamples = 20;
 
 		try {
 			// Create an AudioDispatcher for capturing audio from the microphone
@@ -177,7 +186,7 @@ public class GameManager {
 						pitch = UPPER;
 					}
 					samples.add(pitch);
-					if (samples.size() > 3) {
+					if (samples.size() > nSamples) {
 						samples.remove(0);
 					}
 					System.out.println("############################");
