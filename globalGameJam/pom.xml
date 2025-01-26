@@ -40,5 +40,10 @@
 		    <artifactId>jackson-databind</artifactId>
 			<version>2.18.2</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.github.psambit9791</groupId>
+		    <artifactId>jdsp</artifactId>
+		    <version>3.1.0</version>
+		</dependency>
 	</dependencies>
 </project>
