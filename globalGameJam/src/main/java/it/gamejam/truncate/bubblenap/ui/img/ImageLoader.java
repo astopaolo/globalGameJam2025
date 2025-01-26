@@ -86,7 +86,7 @@ public class ImageLoader {
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/hourglass.png"));
 
 			introVideoFrames = getVideoFrames("img/video/intro/", 100);
-			// gameOverVideoFrames = getVideoFrames("img/video/gameover/", 85);
+			gameOverVideoFrames = getVideoFrames("img/video/gameover/", 85);
 
 		} catch (final IOException e) {
 
