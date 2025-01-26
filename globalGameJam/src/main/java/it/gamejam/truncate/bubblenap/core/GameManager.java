@@ -31,9 +31,16 @@ public class GameManager {
 	private double maxFrequency = 0;
 
 	private List<MovingObject> toRemove = new ArrayList<>();
+	private RealTimePitchDetector rpd;
 
 	public GameManager() {
-		setBubble(new Bubble(INITIAL_BUBBLE_RADIUS, 612, 365, 100.0, 200.0));
+		setBubble(new Bubble(INITIAL_BUBBLE_RADIUS, 612, 365, 50.0, 300.0));
+		try {
+			rpd = new RealTimePitchDetector();
+			rpd.start();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void addMovingObject(MovingObject mo) {
@@ -177,25 +184,18 @@ public class GameManager {
 
 	private void startSound() {
 
-		RealTimePitchDetector rpd;
-		try {
-			rpd = new RealTimePitchDetector();
-			rpd.start();
-			Thread audioThread = new Thread(() -> {
-				while (true) {
-					double pitch = rpd.readPitch();
+		Thread audioThread = new Thread(() -> {
+			while (running.get()) {
+				double pitch = rpd.readPitch();
 //							System.out.println(pitch);
-					if (pitch <= 2) {
-						continue;
-					}
-//							double radius = computeRadius(List.of(pitch));
-					bubble.setRadius(pitch);
+				if (pitch <= 2) {
+					continue;
 				}
-			});
-			audioThread.setDaemon(true);
-			audioThread.start();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
+//							double radius = computeRadius(List.of(pitch));
+				bubble.setRadius(pitch);
+			}
+		});
+		audioThread.setDaemon(true);
+		audioThread.start();
 	}
 }
