@@ -33,12 +33,18 @@ public class GameManager {
 
 	private double maxFrequency = 0;
 
+	private List<MovingObject> toRemove = new ArrayList<>();
+
 	public GameManager() {
-		setBubble(new Bubble(100.0, 578, 380, 100.0, 260.0));
+		setBubble(new Bubble(100.0, 578, 380, 100.0, 200.0));
 	}
 
 	public void addMovingObject(MovingObject mo) {
 		getObjects().add(mo);
+	}
+
+	public void addTimerSeconds(int i) {
+		deathTimer += i * 1000;
 	}
 
 	private double computeRadius(final List<Float> samples) {
@@ -62,7 +68,7 @@ public class GameManager {
 		return retVal;
 	}
 
-	private void gameOver() {
+	public void gameOver() {
 		System.out.println("GameManager.gameOver()");
 		running.set(false);
 		gameOver.set(true);
@@ -92,6 +98,10 @@ public class GameManager {
 		return gameOver.get();
 	}
 
+	public void markToRemove(MovingObject object) {
+		toRemove.add(object);
+	}
+
 	public void setBubble(final Bubble bubble) {
 		this.bubble = bubble;
 	}
@@ -119,7 +129,7 @@ public class GameManager {
 		running.set(true);
 		gameOver.set(false);
 		points = 0;
-		deathTimer = 15_000;
+		deathTimer = 20_000;
 		long rate = 1000 / 100;
 		Runnable updater = new Runnable() {
 
@@ -135,9 +145,11 @@ public class GameManager {
 					getObjects().forEach(t -> t.updatePosition(elapsed));
 					getObjects().forEach(o -> {
 						if (o.collide(bubble)) {
-							gameOver();
+							o.applyEffect(GameManager.this);
 						}
 					});
+					objects.removeAll(toRemove);
+					toRemove.clear();
 					repaintable.update();
 					last += elapsed;
 					points += elapsed;

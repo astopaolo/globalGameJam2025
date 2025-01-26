@@ -19,6 +19,11 @@ public class Mosquito extends MovingObject {
 	}
 
 	@Override
+	protected void applyEffect(GameManager gameManager) {
+		gameManager.gameOver();
+	}
+
+	@Override
 	public Image getTransformedImage() {
 
 		if (transformedImage != null) {

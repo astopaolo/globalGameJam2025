@@ -2,7 +2,7 @@ package it.gamejam.truncate.bubblenap.core;
 
 import java.awt.Image;
 
-public class MovingObject {
+public abstract class MovingObject {
 
 	protected double x;
 	protected double y;
@@ -26,14 +26,12 @@ public class MovingObject {
 		this.setTargetY(targetY);
 	}
 
+	protected abstract void applyEffect(GameManager gameManager);
+
 	public boolean collide(final Bubble bubble) {
 		double d = Math
 				.sqrt(Math.pow(bubble.getX() - (x + (width / 2)), 2) + Math.pow(bubble.getY() - (y + (height / 2)), 2));
-		boolean b = d <= bubble.getRadius() + (width + height) / 16.0;
-		if (b) {
-			System.out.println();
-		}
-		return b;
+		return d <= bubble.getRadius() + (width + height) / 16.0;
 	}
 
 	public double getDx() {

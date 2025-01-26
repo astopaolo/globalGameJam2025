@@ -110,7 +110,7 @@ public class SamplePlayer {
 			sample.setPitchIndex(random.nextInt(maxPitchIndex));
 			entities.add(sample);
 
-			startMeasure += random.nextInt(3) + 1;
+			startMeasure += random.nextInt(2) + 1;
 		}
 
 		return entities;
@@ -151,7 +151,7 @@ public class SamplePlayer {
 			double[] pitches = level.getPitches();
 
 //			samples = level.getEntities();
-			samples = generateRandomEntites(50, pitches.length);
+			samples = generateRandomEntites(500, pitches.length);
 			samples.forEach(s -> s.setup(level.getBpm()));
 			audioSamples = SoundProvider.getSamples(new File("resources/levels/" + levelNumber));
 
@@ -199,7 +199,14 @@ public class SamplePlayer {
 
 			System.err.println(Math.atan(dx / distance));
 
-			gameManager.addMovingObject(new Mosquito(p[0], p[1], ddx, ddy, ds[0], ds[1]));
+			switch (sample.getId()) {
+			case 0:
+				gameManager.addMovingObject(new Mosquito(p[0], p[1], ddx, ddy, ds[0], ds[1]));
+				break;
+			case 1:
+				gameManager.addMovingObject(new HourGlass(p[0], p[1], ddx, ddy, ds[0], ds[1]));
+				break;
+			}
 
 		}
 	}
