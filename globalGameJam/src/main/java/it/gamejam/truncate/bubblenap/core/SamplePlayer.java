@@ -18,18 +18,45 @@ import it.gamejam.truncate.bubblenap.ui.audio.SoundProvider;
 
 public class SamplePlayer {
 
+	public static double calculateAngle(double x1, double y1, double x2, double y2, double x3, double y3) {
+		// Vettore BA
+		double vectorBAx = x1 - x2;
+		double vectorBAy = y1 - y2;
+
+		// Vettore BC
+		double vectorBCx = x3 - x2;
+		double vectorBCy = y3 - y2;
+
+		// Prodotto scalare dei vettori BA e BC
+		double dotProduct = vectorBAx * vectorBCx + vectorBAy * vectorBCy;
+
+		// Lunghezze dei vettori BA e BC
+		double magnitudeBA = Math.sqrt(vectorBAx * vectorBAx + vectorBAy * vectorBAy);
+		double magnitudeBC = Math.sqrt(vectorBCx * vectorBCx + vectorBCy * vectorBCy);
+
+		// Calcolo del coseno dell'angolo
+		double cosTheta = dotProduct / (magnitudeBA * magnitudeBC);
+
+		// Assicurarsi che il valore sia nel range [-1, 1] per evitare errori di calcolo
+		cosTheta = Math.max(-1, Math.min(1, cosTheta));
+
+		// Calcolo dell'angolo in radianti e conversione in gradi
+		double angleRadians = Math.acos(cosTheta);
+		return Math.toDegrees(angleRadians);
+	}
+
 	private List<Sample> samples;
 
 	private GameManager gameManager;
+
 	private List<int[]> points;
 
+	private List<double[]> mosquitoPoints = new ArrayList<double[]>();
+	private List<double[]> hourglassPoints = new ArrayList<double[]>();
 	private final Random random = new Random();
-
 	private Map<String, byte[]> audioSamples;
 
 	private Level level;
-
-	private double[] radiusArray;
 
 //	public void loadLevel(final int levelNumber) {
 //		ObjectMapper mapper = new ObjectMapper();
@@ -58,40 +85,26 @@ public class SamplePlayer {
 //		}
 //	}
 
-	private List<double[]> findTangentPoints(final double circleX, final double circleY, final double radius,
-			final double pointX, final double pointY) {
-		List<double[]> tangentPoints = new ArrayList<>();
+	private double[] radiusArray;
 
-		// Calcola la distanza dal punto al centro della circonferenza
-		double correction = 2.6;
-		double distance = Math.sqrt(Math.pow(pointX - circleX, 2) + Math.pow(pointY - circleY, 2));
+	public SamplePlayer() {
 
-		// Controlla se il punto è esterno alla circonferenza
-		if (distance < radius) {
-			return tangentPoints; // Nessun punto di tangenza
+	}
+
+	private double[] findTangentPoints(final double circleX, final double circleY, final double radius,
+			final double pointX, final double pointY, List<double[]> refPoints) {
+		double max = -1000;
+		int index = 0;
+		int i = 0;
+		for (double[] refP : refPoints) {
+			double angle = calculateAngle(circleX, circleY, pointX, pointY, refP[0], refP[1]);
+			if (angle > max) {
+				index = i;
+				max = angle;
+			}
+			i++;
 		}
-
-		// Calcola l'angolo tra il punto e il centro della circonferenza
-		double angleToPoint = Math.atan2(pointY - circleY, pointX - circleX);
-
-		// Calcola l'angolo di offset per i punti di tangenza
-		double offsetAngle = Math.asin(radius / distance);
-
-		// Calcola i due angoli dei punti di tangenza
-		double angle1 = angleToPoint + offsetAngle;
-		double angle2 = angleToPoint - offsetAngle;
-
-		// Calcola le coordinate dei punti di tangenza
-		double tangentX1 = circleX + (radius * Math.cos(angle1) * correction);
-		double tangentY1 = circleY + (radius * Math.sin(angle1) * correction);
-
-		double tangentX2 = circleX + (radius * Math.cos(angle2) * correction);
-		double tangentY2 = circleY + (radius * Math.sin(angle2) * correction);
-
-		tangentPoints.add(new double[] { tangentX1, tangentY1 });
-		tangentPoints.add(new double[] { tangentX2, tangentY2 });
-
-		return tangentPoints;
+		return refPoints.get(index);
 	}
 
 	private List<Sample> generateRandomEntites(
@@ -186,9 +199,18 @@ public class SamplePlayer {
 					SimpleAudioPlayer.playSyncSoundOnce(audioSamples.get("sample_" + sample.getId() + ".wav"), 3f);
 				};
 			}.start();
+			List<double[]> refPoints = new ArrayList<>();
+			switch (sample.getId()) {
+			case 0:
+				refPoints = mosquitoPoints;
+				break;
+			case 1:
+				refPoints = hourglassPoints;
+				break;
+			}
 			int[] p = points.get(random.nextInt(points.size()));
 			double[] ds = findTangentPoints(gameManager.getBubble().getX(), gameManager.getBubble().getY(),
-					radiusArray[sample.getPitchIndex()], p[0], p[1]).get(random.nextInt(2));
+					radiusArray[sample.getPitchIndex()], p[0], p[1], refPoints);
 
 			double dx = ds[0] - p[0];
 			double dy = ds[1] - p[1];
@@ -214,6 +236,18 @@ public class SamplePlayer {
 	public void setGameManager(final GameManager gameManager) {
 		this.gameManager = gameManager;
 		points = getPointAtDistance(gameManager.getBubble().getX(), gameManager.getBubble().getY(), 500);
+		Bubble bubble = gameManager.getBubble();
+		int mosquitoDelta = 150;
+		int hourglassDelta = 250;
+		mosquitoPoints.add(new double[] { bubble.getX(), bubble.getY() + mosquitoDelta });
+		mosquitoPoints.add(new double[] { bubble.getX() + mosquitoDelta, bubble.getY() });
+		mosquitoPoints.add(new double[] { bubble.getX(), bubble.getY() - mosquitoDelta });
+		mosquitoPoints.add(new double[] { bubble.getX() - mosquitoDelta, bubble.getY() });
+
+		hourglassPoints.add(new double[] { bubble.getX(), bubble.getY() + hourglassDelta });
+		hourglassPoints.add(new double[] { bubble.getX() + hourglassDelta, bubble.getY() });
+		hourglassPoints.add(new double[] { bubble.getX(), bubble.getY() - hourglassDelta });
+		hourglassPoints.add(new double[] { bubble.getX() - hourglassDelta, bubble.getY() });
 	}
 
 	public void setSamples(final List<Sample> samples) {
