@@ -55,6 +55,26 @@ public class GamePanel extends JPanel implements Repaintable {
 
 	}
 
+	public void startGame() {
+		startedGameOverThread.set(false);
+		gameManager.startGame();
+		if (font == null) {
+			try {
+				final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+				ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("resources/fonts/bubble_gum.otf")));
+				font = new Font("Bubble gum", Font.BOLD, 50);
+			} catch (IOException | FontFormatException e) {
+				// IGNORE
+			}
+		}
+
+	}
+
+	@Override
+	public void update() {
+		repaint();
+	}
+
 	@Override
 	protected void paintComponent(final Graphics g) {
 //		System.out.println("GamePanel.paintComponent() " + bubble.getRadius());
@@ -83,35 +103,15 @@ public class GamePanel extends JPanel implements Repaintable {
 		g.drawImage(ImageLoader.getBollaMuco(), bubble.getX() - (int) bubble.getRadius(),
 				bubble.getY() - (int) bubble.getRadius(), (int) bubble.getRadius() * 2, (int) bubble.getRadius() * 2,
 				null);
-		g.setColor(Color.RED);
+		// g.setColor(Color.RED);
 		gameManager.getObjects().forEach(o -> {
 			g.drawImage(o.getTransformedImage(), o.getX(), o.getY(), null);
 //			g.drawRect(o.getX(), o.getY(), o.getWidth(), o.getHeight());
 		});
-		g.setColor(Color.CYAN);
+		g.setColor(Color.WHITE);
 		g.setFont(font);
-		g.drawString("Points " + gameManager.getPoints(), 50, 50);
-		g.drawString("Time " + (gameManager.getDeathTimer() / 1000), getWidth() - 350, 50);
-	}
-
-	public void startGame() {
-		startedGameOverThread.set(false);
-		gameManager.startGame();
-		if (font == null) {
-			try {
-				final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-				ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("resources/fonts/bubblegums.ttf")));
-				font = new Font("bubblegums", Font.BOLD, 32);
-			} catch (IOException | FontFormatException e) {
-				// IGNORE
-			}
-		}
-
-	}
-
-	@Override
-	public void update() {
-		repaint();
+		g.drawString("Points: " + gameManager.getPoints(), 45, 70);
+		g.drawString("Time: " + (gameManager.getDeathTimer() / 1000), getWidth() - 280, 70);
 	}
 
 }

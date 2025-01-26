@@ -2,6 +2,7 @@
 package it.gamejam.truncate.bubblenap.ui;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.JFrame;
 
@@ -11,6 +12,8 @@ import it.gamejam.truncate.bubblenap.ui.audio.SoundProvider;
 import it.gamejam.truncate.bubblenap.ui.img.ImageLoader;
 
 public class MainFrame extends JFrame {
+
+	private static final String MESSAGE_VIDEO_INTRO = "If the bubble pops the child wakes up!";
 
 	private static final long serialVersionUID = -6974599828262854447L;
 
@@ -49,12 +52,12 @@ public class MainFrame extends JFrame {
 		menuPanel = new MenuPanel(this);
 		creditsMenu = new CreditsMenuPanel(this);
 		introVideoPanel = new VideoPanel(this, ImageLoader.getIntroVideoFrames(), EnumPanel.GAME_PANEL,
-				List.of(SoundProvider.getVideoIntro()));
+				List.of(SoundProvider.getVideoIntro()), Optional.of(MESSAGE_VIDEO_INTRO));
 
 		gamePanel = new GamePanel(gameManager, this);
 		scorePanel = new ScorePanel(gameManager, this);
 		gameOverVideoPanel = new VideoPanel(this, ImageLoader.getGameOverVideoFrames(), EnumPanel.SCORE_PANEL,
-				List.of(SoundProvider.getGameOver(), SoundProvider.getFemaleScream()));
+				List.of(SoundProvider.getGameOver(), SoundProvider.getFemaleScream()), Optional.empty());
 
 		gameManager.setRepaintable(gamePanel);
 		setUndecorated(true);
