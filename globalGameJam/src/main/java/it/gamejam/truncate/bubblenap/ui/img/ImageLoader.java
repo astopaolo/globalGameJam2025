@@ -23,8 +23,6 @@ public class ImageLoader {
 	private static Image play;
 	private static Image playPressed;
 
-	private static Image titleImage;
-
 	private static Image back;
 	private static Image backPressed;
 
@@ -73,7 +71,6 @@ public class ImageLoader {
 			playPressed = ImageIO
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/menu/Play_Pressed.png"));
 
-			titleImage = ImageIO.read(Thread.currentThread().getContextClassLoader().getResource("img/menu/Title.png"));
 			back = ImageIO.read(Thread.currentThread().getContextClassLoader().getResource("img/menu/Back.png"));
 
 			backPressed = ImageIO
@@ -172,10 +169,6 @@ public class ImageLoader {
 
 	public static Image getImageScoreBackground() {
 		return scoreBackground;
-	}
-
-	public static Image getImageTitle() {
-		return titleImage;
 	}
 
 	public static List<Image> getIntroVideoFrames() {
