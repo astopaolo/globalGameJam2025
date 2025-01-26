@@ -8,12 +8,25 @@ import java.util.Map;
 
 public class SoundProvider {
 	private static byte[] menu;
+	private static byte[] gameOver;
+	private static byte[] videoIntro;
+
 	private static byte[] bubbleMenuClick;
 	private static byte[] ggj_test_base;
 	private static byte[] ggj_test_sample_1;
 
 	static {
 		try {
+
+			try (FileInputStream fis = new FileInputStream("resources/audio/video_intro.wav")) {
+				videoIntro = new byte[fis.available()];
+				fis.read(videoIntro);
+			}
+
+			try (FileInputStream fis = new FileInputStream("resources/audio/game_over.wav")) {
+				gameOver = new byte[fis.available()];
+				fis.read(gameOver);
+			}
 
 			try (FileInputStream fis = new FileInputStream("resources/audio/menu.wav")) {
 				menu = new byte[fis.available()];
@@ -45,6 +58,10 @@ public class SoundProvider {
 		return bubbleMenuClick;
 	}
 
+	public static byte[] getGameOver() {
+		return gameOver;
+	}
+
 	public static byte[] getGGJTestBase() {
 		return ggj_test_base;
 	}
@@ -68,6 +85,10 @@ public class SoundProvider {
 			}
 		}
 		return samples;
+	}
+
+	public static byte[] getVideoIntro() {
+		return videoIntro;
 	}
 
 }

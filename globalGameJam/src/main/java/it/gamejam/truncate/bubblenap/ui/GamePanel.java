@@ -91,6 +91,9 @@ public class GamePanel extends JPanel implements Repaintable {
 		g.drawString("Tempo " + (gameManager.getDeathTimer() / 1000), getWidth() - 350, 50);
 		if (gameManager.isGameOver()) {
 			mainFrame.drawPanel(EnumPanel.GAME_OVER_VIDEO_PANEL);
+
+			// TODO chiudere thread gioco
+			// TODO stoppare la musica
 		}
 	}
 

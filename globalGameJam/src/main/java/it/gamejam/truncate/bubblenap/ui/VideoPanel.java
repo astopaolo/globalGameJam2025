@@ -8,6 +8,8 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import it.gamejam.truncate.bubblenap.ui.audio.SimpleAudioPlayer;
+
 public class VideoPanel extends JPanel {
 
 	private static final long serialVersionUID = 5857392141854818722L;
@@ -15,10 +17,13 @@ public class VideoPanel extends JPanel {
 	private List<Image> videoFrames;
 	private int currentFrame;
 	private EnumPanel nextPanelToDraw;
+	private byte[] music;
 
-	public VideoPanel(final MainFrame frame, final List<Image> videoFrames, final EnumPanel nextPanelToDraw) {
+	public VideoPanel(final MainFrame frame, final List<Image> videoFrames, final EnumPanel nextPanelToDraw,
+			final byte[] music) {
 		this.frame = frame;
 		this.nextPanelToDraw = nextPanelToDraw;
+		this.music = music;
 		this.setLayout(null);
 		this.videoFrames = videoFrames;
 		currentFrame = 0;
@@ -37,12 +42,14 @@ public class VideoPanel extends JPanel {
 	}
 
 	public void playVideoAndDrawNextPanel() {
+		new Thread(() -> SimpleAudioPlayer.playSyncSoundOnce(music, 3f)).start();
 
 		Timer timer = new Timer(1000 / 24, e -> {
 			repaint();
 
 			if (currentFrame == (videoFrames.size() - 1)) {
 				((Timer) e.getSource()).stop();
+
 				frame.drawPanel(nextPanelToDraw);
 			}
 

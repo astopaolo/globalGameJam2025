@@ -49,7 +49,7 @@ public class MenuPanel extends JPanel {
 				if ((e.getX() >= EXIT_X) && (e.getX() <= (EXIT_X + ImageLoader.getImageExit().getWidth(null)))
 						&& (e.getY() >= EXIT_Y)
 						&& (e.getY() <= (EXIT_Y + ImageLoader.getImageExit().getHeight(null)))) {
-					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getBubbleMenuClick(), 0f);
+					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getBubbleMenuClick(), 3f);
 
 					System.exit(0);
 				}
