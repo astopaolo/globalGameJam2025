@@ -60,14 +60,13 @@ public class MenuPanel extends JPanel {
 					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getBubbleMenuClick(), 0f);
 
 					frame.getBackgroundMusic().stop();
-					frame.drawPanel(EnumPanel.GAME_PANEL);
+					frame.drawPanel(EnumPanel.INTRO_VIDEO_PANEL);
 				}
 				if ((e.getX() >= CREDITS_X) && (e.getX() <= (CREDITS_X + ImageLoader.getImagePlay().getWidth(null)))
 						&& (e.getY() >= CREDITS_Y)
 						&& (e.getY() <= (CREDITS_Y + ImageLoader.getImagePlay().getHeight(null)))) {
 					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getBubbleMenuClick(), 0f);
-//					frame.drawPanel(EnumPanel.CREDITS_MENU_PANEL);
-					frame.drawPanel(EnumPanel.VIDEO_PANEL);
+					frame.drawPanel(EnumPanel.CREDITS_MENU_PANEL);
 				}
 
 			}

@@ -45,10 +45,10 @@ public class MainFrame extends JFrame {
 		setTitle("BubbleNap");
 		menuPanel = new MenuPanel(this);
 		creditsMenu = new CreditsMenuPanel(this);
-		introVideoPanel = new VideoPanel(this, ImageLoader.getIntroVideoFrames(), menuPanel);
+		introVideoPanel = new VideoPanel(this, ImageLoader.getIntroVideoFrames(), EnumPanel.GAME_PANEL);
 
 		gamePanel = new GamePanel(gameManager);
-		gameOverVideoPanel = new VideoPanel(this, ImageLoader.getGameOverVideoFrames(), menuPanel);
+		gameOverVideoPanel = new VideoPanel(this, ImageLoader.getGameOverVideoFrames(), EnumPanel.MENU_PANEL);
 
 		gameManager.setRepaintable(gamePanel);
 		setUndecorated(true);
@@ -88,9 +88,13 @@ public class MainFrame extends JFrame {
 				System.exit(-1);
 			}
 			break;
-		case VIDEO_PANEL:
+		case INTRO_VIDEO_PANEL:
 			this.setContentPane(introVideoPanel);
-			introVideoPanel.playVideo();
+			introVideoPanel.playVideoAndDrawNextPanel();
+			break;
+		case GAME_OVER_VIDEO_PANEL:
+			this.setContentPane(gameOverVideoPanel);
+			gameOverVideoPanel.playVideoAndDrawNextPanel();
 			break;
 		default:
 			break;

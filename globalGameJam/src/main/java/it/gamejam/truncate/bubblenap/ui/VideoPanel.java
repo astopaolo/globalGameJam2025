@@ -14,11 +14,11 @@ public class VideoPanel extends JPanel {
 	MainFrame frame;
 	private List<Image> videoFrames;
 	private int currentFrame;
-	private JPanel nextPanel;
+	private EnumPanel nextPanelToDraw;
 
-	public VideoPanel(final MainFrame frame, final List<Image> videoFrames, final JPanel nextPanel) {
+	public VideoPanel(final MainFrame frame, final List<Image> videoFrames, final EnumPanel nextPanelToDraw) {
 		this.frame = frame;
-		this.nextPanel = nextPanel;
+		this.nextPanelToDraw = nextPanelToDraw;
 		this.setLayout(null);
 		this.videoFrames = videoFrames;
 		currentFrame = 0;
@@ -36,13 +36,14 @@ public class VideoPanel extends JPanel {
 		}
 	}
 
-	public void playVideo() {
+	public void playVideoAndDrawNextPanel() {
 
 		Timer timer = new Timer(1000 / 24, e -> {
 			repaint();
 
 			if (currentFrame == (videoFrames.size() - 1)) {
 				((Timer) e.getSource()).stop();
+				frame.drawPanel(nextPanelToDraw);
 			}
 
 		});
