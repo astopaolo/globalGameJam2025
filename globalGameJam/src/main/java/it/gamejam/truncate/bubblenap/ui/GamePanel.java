@@ -26,7 +26,7 @@ public class GamePanel extends JPanel implements Repaintable {
 	public GamePanel(final GameManager gameManager) {
 		this.gameManager = gameManager;
 		this.bubble = gameManager.getBubble();
-		setPreferredSize(new Dimension(1024, 768));
+		setPreferredSize(new Dimension(1280, 768));
 		setBackground(Color.DARK_GRAY);
 		addKeyListener(new KeyAdapter() {
 			@Override
