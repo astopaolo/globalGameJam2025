@@ -1,7 +1,9 @@
 package it.gamejam.truncate.bubblenap.core;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -185,14 +187,28 @@ public class GameManager {
 	private void startSound() {
 
 		Thread audioThread = new Thread(() -> {
+			final Queue<Double> BUFFER = new LinkedList<>();
 			while (running.get()) {
 				double pitch = rpd.readPitch();
-//							System.out.println(pitch);
-				if (pitch <= 2) {
+				if (pitch <= 2)
 					continue;
-				}
-//							double radius = computeRadius(List.of(pitch));
-				bubble.setRadius(pitch);
+				
+				if (BUFFER.size() >= 3)
+					BUFFER.poll();
+				
+				BUFFER.add(pitch);
+				
+				double sum = 0.0;
+			    for (double value : BUFFER) {
+			        sum += value;
+			    }
+			    sum /= Math.max(BUFFER.size(), 0);
+
+//				System.out.println(pitch);
+//				System.out.println("Smooth: " + sum);
+//				System.out.println("Pitch: " + pitch);
+//				double radius = computeRadius(List.of(pitch));
+				bubble.setRadius(sum);
 			}
 		});
 		audioThread.setDaemon(true);
