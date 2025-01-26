@@ -84,12 +84,12 @@ public class ScorePanel extends JPanel {
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(back, BACK_X, BACK_Y, 330, 83, null);
 
-		g.setColor(Color.CYAN);
+		g.setColor(Color.WHITE);
 		g.setFont(bubbleFont);
 
-		g.drawString("Points", 350, 310);
+		g.drawString("Points", 640 - 150, 200);
 
-		g.drawString("" + gameManager.getPoints(), 650, 310);
+		g.drawString("" + gameManager.getPoints(), 640 - 150, 384);
 
 	}
 
@@ -97,11 +97,13 @@ public class ScorePanel extends JPanel {
 		if (bubbleFont == null) {
 			try {
 				final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-				ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("resources/fonts/bubblegums.ttf")));
-				bubbleFont = new Font("bubblegums", Font.BOLD, 50);
+				ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("resources/fonts/bubble_gum.otf")));
+				bubbleFont = new Font("Bubble gum", Font.BOLD, 100);
 			} catch (IOException | FontFormatException e) {
 				// IGNORE
 			}
 		}
+
 	}
+
 }
