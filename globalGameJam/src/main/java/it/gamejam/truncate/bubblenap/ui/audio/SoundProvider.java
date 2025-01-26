@@ -11,6 +11,7 @@ public class SoundProvider {
 	private static byte[] gameOver;
 	private static byte[] videoIntro;
 	private static byte[] femaleScream;
+	private static byte[] bubleExplosion;
 
 	private static byte[] bubbleMenuClick;
 	private static byte[] ggj_test_base;
@@ -19,9 +20,14 @@ public class SoundProvider {
 	static {
 		try {
 
+			try (FileInputStream fis = new FileInputStream("resources/audio/bubble-explosion.wav")) {
+				bubleExplosion = new byte[fis.available()];
+				fis.read(bubleExplosion);
+			}
+
 			try (FileInputStream fis = new FileInputStream("resources/audio/female-scream.wav")) {
 				femaleScream = new byte[fis.available()];
-				fis.read(getFemaleScream());
+				fis.read(femaleScream);
 			}
 
 			try (FileInputStream fis = new FileInputStream("resources/audio/video_intro.wav")) {
@@ -64,6 +70,14 @@ public class SoundProvider {
 		return bubbleMenuClick;
 	}
 
+	public static byte[] getBubleExplosion() {
+		return bubleExplosion;
+	}
+
+	public static byte[] getFemaleScream() {
+		return femaleScream;
+	}
+
 	public static byte[] getGameOver() {
 		return gameOver;
 	}
@@ -95,10 +109,6 @@ public class SoundProvider {
 
 	public static byte[] getVideoIntro() {
 		return videoIntro;
-	}
-
-	public static byte[] getFemaleScream() {
-		return femaleScream;
 	}
 
 }
