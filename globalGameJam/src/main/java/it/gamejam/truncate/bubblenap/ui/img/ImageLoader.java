@@ -37,6 +37,7 @@ public class ImageLoader {
 	private static Image gameScreen;
 	private static Image bollaMuco;
 	private static Image hourGlass;
+	private static Image scoreBackground;
 
 	private static List<Image> introVideoFrames;
 
@@ -84,6 +85,9 @@ public class ImageLoader {
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/GameScreen.png"));
 			hourGlass = ImageIO
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/hourglass.png"));
+
+			scoreBackground = ImageIO
+					.read(Thread.currentThread().getContextClassLoader().getResource("img/menu/score_background.png"));
 
 			introVideoFrames = getVideoFrames("img/video/intro/", 100);
 			gameOverVideoFrames = getVideoFrames("img/video/gameover/", 85);
@@ -157,6 +161,10 @@ public class ImageLoader {
 	public static Image getImagePlayPressed() {
 
 		return playPressed;
+	}
+
+	public static Image getImageScoreBackground() {
+		return scoreBackground;
 	}
 
 	public static Image getImageTitle() {
