@@ -37,6 +37,7 @@ public class MainFrame extends JFrame {
 	private final GamePanel gamePanel;
 	private final VideoPanel introVideoPanel;
 	private final VideoPanel gameOverVideoPanel;
+	private final ScorePanel scorePanel;
 
 	public MainFrame() {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -44,12 +45,13 @@ public class MainFrame extends JFrame {
 		GameManager gameManager = new GameManager();
 		setTitle("BubbleNap");
 		menuPanel = new MenuPanel(this);
+		scorePanel = new ScorePanel(this);
 		creditsMenu = new CreditsMenuPanel(this);
 		introVideoPanel = new VideoPanel(this, ImageLoader.getIntroVideoFrames(), EnumPanel.GAME_PANEL,
 				SoundProvider.getVideoIntro());
 
 		gamePanel = new GamePanel(gameManager, this);
-		gameOverVideoPanel = new VideoPanel(this, ImageLoader.getGameOverVideoFrames(), EnumPanel.MENU_PANEL,
+		gameOverVideoPanel = new VideoPanel(this, ImageLoader.getGameOverVideoFrames(), EnumPanel.SCORE_PANEL,
 				SoundProvider.getGameOver());
 
 		gameManager.setRepaintable(gamePanel);
@@ -97,6 +99,9 @@ public class MainFrame extends JFrame {
 		case GAME_OVER_VIDEO_PANEL:
 			this.setContentPane(gameOverVideoPanel);
 			gameOverVideoPanel.playVideoAndDrawNextPanel();
+			break;
+		case SCORE_PANEL:
+			this.setContentPane(scorePanel);
 			break;
 		default:
 			break;
