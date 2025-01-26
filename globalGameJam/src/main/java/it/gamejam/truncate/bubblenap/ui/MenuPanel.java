@@ -66,7 +66,8 @@ public class MenuPanel extends JPanel {
 						&& (e.getY() >= CREDITS_Y)
 						&& (e.getY() <= (CREDITS_Y + ImageLoader.getImagePlay().getHeight(null)))) {
 					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getBubbleMenuClick(), 0f);
-					frame.drawPanel(EnumPanel.CREDITS_MENU_PANEL);
+//					frame.drawPanel(EnumPanel.CREDITS_MENU_PANEL);
+					frame.drawPanel(EnumPanel.VIDEO_PANEL);
 				}
 
 			}

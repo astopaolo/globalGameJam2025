@@ -39,6 +39,8 @@ public class ImageLoader {
 
 	private static List<Image> introVideoFrames;
 
+	private static List<Image> gameOverVideoFrames;
+
 	static {
 		try {
 
@@ -81,6 +83,7 @@ public class ImageLoader {
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/GameScreen.png"));
 
 			introVideoFrames = getVideoFrames("img/video/intro/", 100);
+			// gameOverVideoFrames = getVideoFrames("img/video/gameover/", 85);
 
 		} catch (final IOException e) {
 
@@ -98,6 +101,10 @@ public class ImageLoader {
 
 	public static Image getGameover() {
 		return gameover;
+	}
+
+	public static List<Image> getGameOverVideoFrames() {
+		return gameOverVideoFrames;
 	}
 
 	public static Image getGameScreen() {
@@ -149,6 +156,10 @@ public class ImageLoader {
 		return titleImage;
 	}
 
+	public static List<Image> getIntroVideoFrames() {
+		return introVideoFrames;
+	}
+
 	public static Image getMosquito() {
 		return mosquito;
 	}
@@ -170,10 +181,6 @@ public class ImageLoader {
 
 		}
 		return frames;
-	}
-
-	public static List<Image> getIntroVideoFrames() {
-		return introVideoFrames;
 	}
 
 }

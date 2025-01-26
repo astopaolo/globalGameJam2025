@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import it.gamejam.truncate.bubblenap.core.GameManager;
 import it.gamejam.truncate.bubblenap.ui.audio.SimpleAudioPlayer;
 import it.gamejam.truncate.bubblenap.ui.audio.SoundProvider;
+import it.gamejam.truncate.bubblenap.ui.img.ImageLoader;
 
 public class MainFrame extends JFrame {
 
@@ -34,6 +35,8 @@ public class MainFrame extends JFrame {
 
 	private final CreditsMenuPanel creditsMenu;
 	private final GamePanel gamePanel;
+	private final VideoPanel introVideoPanel;
+	private final VideoPanel gameOverVideoPanel;
 
 	public MainFrame() {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -42,6 +45,9 @@ public class MainFrame extends JFrame {
 		setTitle("BubbleNap");
 		menuPanel = new MenuPanel(this);
 		creditsMenu = new CreditsMenuPanel(this);
+		introVideoPanel = new VideoPanel(this, ImageLoader.getIntroVideoFrames());
+		gameOverVideoPanel = new VideoPanel(this, ImageLoader.getGameOverVideoFrames());
+
 		gamePanel = new GamePanel(gameManager);
 		gameManager.setRepaintable(gamePanel);
 		setUndecorated(true);
@@ -80,6 +86,9 @@ public class MainFrame extends JFrame {
 				e.printStackTrace();
 				System.exit(-1);
 			}
+		case VIDEO_PANEL:
+			this.setContentPane(introVideoPanel);
+			introVideoPanel.playVideo();
 			break;
 		default:
 			break;
