@@ -14,6 +14,7 @@ import be.tarsos.dsp.pitch.PitchProcessor;
 import it.gamejam.truncate.bubblenap.ui.Repaintable;
 
 public class GameManager {
+	private static final double INITIAL_BUBBLE_RADIUS = 100.0;
 	private Bubble bubble;
 	private Repaintable repaintable;
 	private List<MovingObject> objects = new CopyOnWriteArrayList<>();
@@ -36,7 +37,7 @@ public class GameManager {
 	private List<MovingObject> toRemove = new ArrayList<>();
 
 	public GameManager() {
-		setBubble(new Bubble(100.0, 612, 365, 100.0, 200.0));
+		setBubble(new Bubble(INITIAL_BUBBLE_RADIUS, 612, 365, 100.0, 200.0));
 	}
 
 	public void addMovingObject(MovingObject mo) {
@@ -125,11 +126,12 @@ public class GameManager {
 	}
 
 	public void startGame() {
-//		startSound();
+		startSound();
 		running.set(true);
 		gameOver.set(false);
 		points = 0;
 		deathTimer = 20_000;
+		bubble.setRadius(INITIAL_BUBBLE_RADIUS);
 		objects.clear();
 		long rate = 1000 / 100;
 		Runnable updater = new Runnable() {
