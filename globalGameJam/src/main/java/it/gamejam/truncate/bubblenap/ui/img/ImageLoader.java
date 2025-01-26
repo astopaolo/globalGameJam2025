@@ -2,6 +2,8 @@ package it.gamejam.truncate.bubblenap.ui.img;
 
 import java.awt.Image;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -34,6 +36,8 @@ public class ImageLoader {
 	private static Image gameover;
 	private static Image gameScreen;
 	private static Image bollaMuco;
+
+	private static List<Image> introVideoFrames;
 
 	static {
 		try {
@@ -75,6 +79,8 @@ public class ImageLoader {
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/bolla_muco.png"));
 			gameScreen = ImageIO
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/GameScreen.png"));
+
+			introVideoFrames = getVideoFrames("img/video/intro/", 100);
 
 		} catch (final IOException e) {
 
@@ -153,6 +159,21 @@ public class ImageLoader {
 
 	public static Image getPlayBackWhite() {
 		return playBackRed;
+	}
+
+	private static List<Image> getVideoFrames(final String dir, final int numberFrames) throws IOException {
+		List<Image> frames = new ArrayList<>();
+
+		for (int frameNumber = 1; frameNumber <= numberFrames; frameNumber++) {
+			frames.add(ImageIO
+					.read(Thread.currentThread().getContextClassLoader().getResource(dir + frameNumber + ".png")));
+
+		}
+		return frames;
+	}
+
+	public static List<Image> getIntroVideoFrames() {
+		return introVideoFrames;
 	}
 
 }
