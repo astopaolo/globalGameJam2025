@@ -227,23 +227,24 @@ public class SamplePlayer {
 			@Override
 			public void run() {
 				try {
-					new SimpleAudioPlayer(audioSamples.get(level.getBase()), 3f).playLoop();
-				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+					SimpleAudioPlayer simpleAudioPlayer = new SimpleAudioPlayer(audioSamples.get(level.getBase()), 3f);
+					simpleAudioPlayer.playLoop();
 
-				while (!samples.isEmpty()) {
-					long current = System.currentTimeMillis();
+					while (!samples.isEmpty() && !gameManager.isGameOver()) {
+						long current = System.currentTimeMillis();
 //					System.out.println(current - start);
-					if ((current - start) >= samples.get(0).getStartTime()) {
-						playSample(samples.remove(0));
+						if ((current - start) >= samples.get(0).getStartTime()) {
+							playSample(samples.remove(0));
+						}
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					simpleAudioPlayer.stop();
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+					e.printStackTrace();
 				}
 			}
 		};

@@ -36,7 +36,7 @@ public class GameManager {
 	private List<MovingObject> toRemove = new ArrayList<>();
 
 	public GameManager() {
-		setBubble(new Bubble(100.0, 578, 380, 100.0, 200.0));
+		setBubble(new Bubble(100.0, 612, 365, 100.0, 200.0));
 	}
 
 	public void addMovingObject(MovingObject mo) {
