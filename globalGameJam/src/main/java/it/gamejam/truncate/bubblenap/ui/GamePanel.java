@@ -5,7 +5,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
+import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -58,6 +60,13 @@ public class GamePanel extends JPanel implements Repaintable {
 	@Override
 	protected void paintComponent(final Graphics g) {
 		super.paintComponent(g);
+		
+		Graphics2D g2d = (Graphics2D) g;
+
+        // Enable anti-aliasing for text
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		
 		g.drawImage(ImageLoader.getGameScreen(), 0, 0, getWidth(), getHeight(), null);
 		if (gameManager.isGameOver()) {
 

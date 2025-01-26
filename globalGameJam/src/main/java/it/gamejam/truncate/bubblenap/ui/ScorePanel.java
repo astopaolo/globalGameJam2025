@@ -5,8 +5,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -80,6 +82,13 @@ public class ScorePanel extends JPanel {
 	@Override
 	public void paintComponent(final Graphics g) {
 		super.paintComponent(g);
+		
+		Graphics2D g2d = (Graphics2D) g;
+
+        // Enable anti-aliasing for text
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		
 		g.drawImage(scoreBackground, 0, 0, this.getWidth(), this.getHeight(), null);
 		g.setColor(new Color(0, 0, 0, 0.6f));
 		g.fillRect(0, 0, getWidth(), getHeight());
