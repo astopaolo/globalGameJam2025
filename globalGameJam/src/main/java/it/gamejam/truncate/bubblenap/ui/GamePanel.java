@@ -26,7 +26,7 @@ public class GamePanel extends JPanel implements Repaintable {
 	public GamePanel(final GameManager gameManager) {
 		this.gameManager = gameManager;
 		this.bubble = gameManager.getBubble();
-		setPreferredSize(new Dimension(1200, 800));
+		setPreferredSize(new Dimension(1024, 768));
 		setBackground(Color.DARK_GRAY);
 		addKeyListener(new KeyAdapter() {
 			@Override
@@ -50,29 +50,6 @@ public class GamePanel extends JPanel implements Repaintable {
 
 	}
 
-	@Override
-	protected void paintComponent(final Graphics g) {
-//		System.out.println("GamePanel.paintComponent() " + bubble.getRadius());
-		super.paintComponent(g);
-		g.drawImage(ImageLoader.getGameScreen(), 0, 0, getWidth(), getHeight(), null);
-//		g.drawImage(ImageLoader.getBollaMuco(), bubble.getX() - 10, bubble.getY() - 10, 20, 20, null);
-		g.drawImage(ImageLoader.getBollaMuco(), bubble.getX() - (int) bubble.getRadius(),
-				bubble.getY() - (int) bubble.getRadius(), (int) bubble.getRadius() * 2, (int) bubble.getRadius() * 2,
-				null);
-		g.setColor(Color.RED);
-		gameManager.getObjects().forEach(o -> {
-			g.drawImage(o.getTransformedImage(), o.getX(), o.getY(), null);
-//			g.drawRect(o.getX(), o.getY(), o.getWidth(), o.getHeight());
-		});
-		g.setColor(Color.CYAN);
-		g.setFont(font);
-		g.drawString("Punti " + gameManager.getPoints(), 50, 50);
-		g.drawString("Tempo " + gameManager.getDeathTimer() / 1000, getWidth() - 350, 50);
-		if (gameManager.isGameOver()) {
-			g.drawImage(ImageLoader.getGameover(), 0, 0, getWidth(), getHeight(), null);
-		}
-	}
-
 	public void startGame() {
 		gameManager.startGame();
 		if (font == null) {
@@ -90,6 +67,29 @@ public class GamePanel extends JPanel implements Repaintable {
 	@Override
 	public void update() {
 		repaint();
+	}
+
+	@Override
+	protected void paintComponent(final Graphics g) {
+//		System.out.println("GamePanel.paintComponent() " + bubble.getRadius());
+		super.paintComponent(g);
+		g.drawImage(ImageLoader.getGameScreen(), 0, 0, getWidth(), getHeight(), null);
+//		g.drawImage(ImageLoader.getBollaMuco(), bubble.getX() - 10, bubble.getY() - 10, 20, 20, null);
+		g.drawImage(ImageLoader.getBollaMuco(), bubble.getX() - (int) bubble.getRadius(),
+				bubble.getY() - (int) bubble.getRadius(), (int) bubble.getRadius() * 2, (int) bubble.getRadius() * 2,
+				null);
+		g.setColor(Color.RED);
+		gameManager.getObjects().forEach(o -> {
+			g.drawImage(o.getTransformedImage(), o.getX(), o.getY(), null);
+//			g.drawRect(o.getX(), o.getY(), o.getWidth(), o.getHeight());
+		});
+		g.setColor(Color.CYAN);
+		g.setFont(font);
+		g.drawString("Punti " + gameManager.getPoints(), 50, 50);
+		g.drawString("Tempo " + (gameManager.getDeathTimer() / 1000), getWidth() - 350, 50);
+		if (gameManager.isGameOver()) {
+			g.drawImage(ImageLoader.getGameover(), 0, 0, getWidth(), getHeight(), null);
+		}
 	}
 
 }
