@@ -87,6 +87,7 @@ public class MainFrame extends JFrame {
 				e.printStackTrace();
 				System.exit(-1);
 			}
+			break;
 		case VIDEO_PANEL:
 			this.setContentPane(introVideoPanel);
 			introVideoPanel.playVideo();
