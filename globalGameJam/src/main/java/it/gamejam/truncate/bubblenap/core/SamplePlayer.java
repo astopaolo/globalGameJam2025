@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -59,45 +58,6 @@ public class SamplePlayer {
 //		}
 //	}
 
-	public void setGameManager(final GameManager gameManager) {
-		this.gameManager = gameManager;
-		points = getPointAtDistance(gameManager.getBubble().getX(), gameManager.getBubble().getY(), 500);
-	}
-
-	public void setSamples(final List<Sample> samples) {
-		this.samples = samples;
-		Collections.sort(this.samples);
-	}
-
-	public void start() {
-		long start = System.currentTimeMillis();
-		Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				try {
-					new SimpleAudioPlayer(audioSamples.get(level.getBase()), 3f).playLoop();
-				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				while (!samples.isEmpty()) {
-					long current = System.currentTimeMillis();
-//					System.out.println(current - start);
-					if ((current - start) >= samples.get(0).getStartTime()) {
-						playSample(samples.remove(0));
-					}
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		};
-		new Thread(runnable).start();
-	}
-
 	private List<double[]> findTangentPoints(final double circleX, final double circleY, final double radius,
 			final double pointX, final double pointY) {
 		List<double[]> tangentPoints = new ArrayList<>();
@@ -134,6 +94,28 @@ public class SamplePlayer {
 		return tangentPoints;
 	}
 
+	private List<Sample> generateRandomEntites(
+			final int howManyEntitesWouldYouLikeMeToGenerateExactlyPleaseTellMeSoThatICanFulfillYourRequestOk,
+			final int maxPitchIndex) {
+		final List<Sample> entities = new ArrayList<>();
+		int startMeasure = random.nextInt(3);
+		for (int i = 0; i < howManyEntitesWouldYouLikeMeToGenerateExactlyPleaseTellMeSoThatICanFulfillYourRequestOk; i++) {
+
+			final Sample sample = new Sample();
+			sample.setId(random.nextInt(2));
+			sample.setStartMeasure(startMeasure);
+			sample.setStartSub(random.nextInt(8));
+			sample.setEndMeasure(startMeasure + random.nextInt(2) + 1);
+			sample.setEndSub(random.nextInt(8));
+			sample.setPitchIndex(random.nextInt(maxPitchIndex));
+			entities.add(sample);
+
+			startMeasure += random.nextInt(3) + 1;
+		}
+
+		return entities;
+	}
+
 	private List<int[]> getPointAtDistance(final int x, final int y, final int distance) {
 		List<int[]> validPoints = new ArrayList<>();
 
@@ -158,28 +140,6 @@ public class SamplePlayer {
 
 	public List<Sample> getSamples() {
 		return samples;
-	}
-
-	private List<Sample> generateRandomEntites(
-			final int howManyEntitesWouldYouLikeMeToGenerateExactlyPleaseTellMeSoThatICanFulfillYourRequestOk,
-			final int maxPitchIndex) {
-		final List<Sample> entities = new LinkedList<>();
-
-		for (int i = 0; i < howManyEntitesWouldYouLikeMeToGenerateExactlyPleaseTellMeSoThatICanFulfillYourRequestOk; i++) {
-			final int id = (int) (Math.random() + 0.5);
-			final int startMeasure = 0;
-			final Sample sample = new Sample();
-			sample.setId(id);
-			sample.setStartMeasure(startMeasure);
-			sample.setStartSub(6);
-			sample.setEndMeasure(2 - id);
-			sample.setEndSub(2 * id);
-			sample.setPitchIndex(new Random().nextInt(maxPitchIndex + 1));
-
-			entities.add(sample);
-		}
-
-		return entities;
 	}
 
 	public void loadLevel(int levelNumber) {
@@ -242,6 +202,45 @@ public class SamplePlayer {
 			gameManager.addMovingObject(new Mosquito(p[0], p[1], ddx, ddy, ds[0], ds[1]));
 
 		}
+	}
+
+	public void setGameManager(final GameManager gameManager) {
+		this.gameManager = gameManager;
+		points = getPointAtDistance(gameManager.getBubble().getX(), gameManager.getBubble().getY(), 500);
+	}
+
+	public void setSamples(final List<Sample> samples) {
+		this.samples = samples;
+		Collections.sort(this.samples);
+	}
+
+	public void start() {
+		long start = System.currentTimeMillis();
+		Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					new SimpleAudioPlayer(audioSamples.get(level.getBase()), 3f).playLoop();
+				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				while (!samples.isEmpty()) {
+					long current = System.currentTimeMillis();
+//					System.out.println(current - start);
+					if ((current - start) >= samples.get(0).getStartTime()) {
+						playSample(samples.remove(0));
+					}
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		new Thread(runnable).start();
 	}
 
 }
