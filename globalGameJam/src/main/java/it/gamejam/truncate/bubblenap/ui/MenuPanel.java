@@ -1,11 +1,17 @@
 package it.gamejam.truncate.bubblenap.ui;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JPanel;
 
@@ -15,29 +21,31 @@ import it.gamejam.truncate.bubblenap.ui.img.ImageLoader;
 
 public class MenuPanel extends JPanel {
 
+	private static final Color C_GREEN = new Color(203, 224, 108, 241);
 	private static final long serialVersionUID = -5148674646680024173L;
 	private static Image playButtonImage = ImageLoader.getImagePlay();
 	private static Image ExitButtonImage = ImageLoader.getImageExit();
 	private static Image creditsButtonImage = ImageLoader.getImageCredits();
-	private static Image titleImage = ImageLoader.getImageTitle();
+	// private static Image titleImage = ImageLoader.getImageTitle();
 
 	private static Image Background = ImageLoader.getImageBackground();
 
-	private static int PLAY_BUTTON_X = 840;
-	private static int PLAY_BUTTON_Y = 300;
+	private static int PLAY_BUTTON_X = 750;
+	private static int PLAY_BUTTON_Y = 270;
 
-	private static int CREDITS_X = PLAY_BUTTON_X - 40;
+	private static int CREDITS_X = PLAY_BUTTON_X - 90;
 	private static int CREDITS_Y = PLAY_BUTTON_Y + 150;
 
-	private static int EXIT_X = PLAY_BUTTON_X;
+	private static int EXIT_X = PLAY_BUTTON_X + 10;
 	private static int EXIT_Y = PLAY_BUTTON_Y + 300;
 
 	MainFrame frame;
+	private Font titleFont;
 
 	public MenuPanel(final MainFrame frame) {
 
 		this.frame = frame;
-
+		loadFont();
 		setPreferredSize(new Dimension(1280, 768));
 
 		requestFocus();
@@ -126,12 +134,31 @@ public class MenuPanel extends JPanel {
 
 		g.drawImage(Background, 0, 0, this.getWidth(), this.getHeight(), null);
 
-		g.drawImage(creditsButtonImage, CREDITS_X, CREDITS_Y, 400, 72, null);
+		g.setColor(Color.WHITE);
+		g.setFont(titleFont);
 
-		g.drawImage(playButtonImage, PLAY_BUTTON_X, PLAY_BUTTON_Y, 330, 83, null);
-		g.drawImage(ExitButtonImage, EXIT_X, EXIT_Y, 330, 83, null);
+		g.drawImage(creditsButtonImage, CREDITS_X, CREDITS_Y, null);
 
-		g.drawImage(titleImage, 130, 0, null);
+		g.drawImage(playButtonImage, PLAY_BUTTON_X, PLAY_BUTTON_Y, null);
+		g.drawImage(ExitButtonImage, EXIT_X, EXIT_Y, null);
+
+		g.setColor(C_GREEN);
+		g.setFont(titleFont);
+
+		g.drawString("Bubble Nap", 50, 180);
+
+	}
+
+	private void loadFont() {
+		if (titleFont == null) {
+			try {
+				final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+				ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("resources/fonts/bubble_gum.otf")));
+				titleFont = new Font("Bubble gum", Font.BOLD, 180);
+			} catch (IOException | FontFormatException e) {
+				// IGNORE
+			}
+		}
 
 	}
 }
