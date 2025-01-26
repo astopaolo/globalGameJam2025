@@ -22,9 +22,11 @@ public class GamePanel extends JPanel implements Repaintable {
 	private final Bubble bubble;
 	private final GameManager gameManager;
 	private Font font;
+	private MainFrame mainFrame;
 
-	public GamePanel(final GameManager gameManager) {
+	public GamePanel(final GameManager gameManager, final MainFrame frame) {
 		this.gameManager = gameManager;
+		this.mainFrame = frame;
 		this.bubble = gameManager.getBubble();
 		setPreferredSize(new Dimension(1280, 768));
 		setBackground(Color.DARK_GRAY);
@@ -88,7 +90,7 @@ public class GamePanel extends JPanel implements Repaintable {
 		g.drawString("Punti " + gameManager.getPoints(), 50, 50);
 		g.drawString("Tempo " + (gameManager.getDeathTimer() / 1000), getWidth() - 350, 50);
 		if (gameManager.isGameOver()) {
-			g.drawImage(ImageLoader.getGameover(), 0, 0, getWidth(), getHeight(), null);
+			mainFrame.drawPanel(EnumPanel.GAME_OVER_VIDEO_PANEL);
 		}
 	}
 

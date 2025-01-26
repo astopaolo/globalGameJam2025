@@ -47,7 +47,7 @@ public class MainFrame extends JFrame {
 		creditsMenu = new CreditsMenuPanel(this);
 		introVideoPanel = new VideoPanel(this, ImageLoader.getIntroVideoFrames(), EnumPanel.GAME_PANEL);
 
-		gamePanel = new GamePanel(gameManager);
+		gamePanel = new GamePanel(gameManager, this);
 		gameOverVideoPanel = new VideoPanel(this, ImageLoader.getGameOverVideoFrames(), EnumPanel.MENU_PANEL);
 
 		gameManager.setRepaintable(gamePanel);
