@@ -1,14 +1,21 @@
 package it.gamejam.truncate.bubblenap.ui;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JPanel;
 
+import it.gamejam.truncate.bubblenap.core.GameManager;
 import it.gamejam.truncate.bubblenap.ui.audio.SimpleAudioPlayer;
 import it.gamejam.truncate.bubblenap.ui.audio.SoundProvider;
 import it.gamejam.truncate.bubblenap.ui.img.ImageLoader;
@@ -21,8 +28,11 @@ public class ScorePanel extends JPanel {
 	private static final int BACK_X = (1280 / 2) - 150;
 	private static final int BACK_Y = 643;
 	MainFrame frame;
+	private GameManager gameManager;
+	private Font bubbleFont;
 
-	public ScorePanel(final MainFrame frame) {
+	public ScorePanel(final GameManager gameManager, final MainFrame frame) {
+		this.gameManager = gameManager;
 		this.frame = frame;
 
 		this.setLayout(null);
@@ -63,6 +73,7 @@ public class ScorePanel extends JPanel {
 
 		});
 
+		showScore();
 	}
 
 	@Override
@@ -71,5 +82,24 @@ public class ScorePanel extends JPanel {
 		g.drawImage(scoreBackground, 0, 0, this.getWidth(), this.getHeight(), null);
 		g.drawImage(back, BACK_X, BACK_Y, 330, 83, null);
 
+		g.setColor(Color.CYAN);
+		g.setFont(bubbleFont);
+
+		g.drawString("Points" + gameManager.getPoints(), 400, 300);
+
+		g.drawString("" + gameManager.getPoints(), 400, 385);
+
+	}
+
+	private void showScore() {
+		if (bubbleFont == null) {
+			try {
+				final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+				ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("resources/fonts/bubblegums.ttf")));
+				bubbleFont = new Font("bubblegums", Font.BOLD, 50);
+			} catch (IOException | FontFormatException e) {
+				// IGNORE
+			}
+		}
 	}
 }

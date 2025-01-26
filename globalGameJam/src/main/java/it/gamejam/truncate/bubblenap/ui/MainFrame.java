@@ -45,12 +45,12 @@ public class MainFrame extends JFrame {
 		GameManager gameManager = new GameManager();
 		setTitle("BubbleNap");
 		menuPanel = new MenuPanel(this);
-		scorePanel = new ScorePanel(this);
 		creditsMenu = new CreditsMenuPanel(this);
 		introVideoPanel = new VideoPanel(this, ImageLoader.getIntroVideoFrames(), EnumPanel.GAME_PANEL,
 				SoundProvider.getVideoIntro());
 
 		gamePanel = new GamePanel(gameManager, this);
+		scorePanel = new ScorePanel(gameManager, this);
 		gameOverVideoPanel = new VideoPanel(this, ImageLoader.getGameOverVideoFrames(), EnumPanel.SCORE_PANEL,
 				SoundProvider.getGameOver());
 

@@ -87,8 +87,8 @@ public class GamePanel extends JPanel implements Repaintable {
 		});
 		g.setColor(Color.CYAN);
 		g.setFont(font);
-		g.drawString("Punti " + gameManager.getPoints(), 50, 50);
-		g.drawString("Tempo " + (gameManager.getDeathTimer() / 1000), getWidth() - 350, 50);
+		g.drawString("Points " + gameManager.getPoints(), 50, 50);
+		g.drawString("Time " + (gameManager.getDeathTimer() / 1000), getWidth() - 350, 50);
 		if (gameManager.isGameOver()) {
 			mainFrame.drawPanel(EnumPanel.GAME_OVER_VIDEO_PANEL);
 
