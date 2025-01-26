@@ -7,10 +7,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.sound.sampled.LineUnavailableException;
 
-import be.tarsos.dsp.AudioDispatcher;
-import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
-import be.tarsos.dsp.pitch.PitchDetectionHandler;
-import be.tarsos.dsp.pitch.PitchProcessor;
 import it.gamejam.truncate.bubblenap.ui.Repaintable;
 
 public class GameManager {
@@ -180,51 +176,26 @@ public class GameManager {
 	}
 
 	private void startSound() {
-		// Define the microphone capture parameters
-		int sampleRate = 44100; // Common audio sample rate
-		int bufferSize = 2092; // Size of each audio buffer
-		int overlap = 0; // Overlap between buffers
-		List<Float> samples = new ArrayList<>();
 
+		RealTimePitchDetector rpd;
 		try {
-			// Create an AudioDispatcher for capturing audio from the microphone
-			AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(sampleRate, bufferSize, overlap);
-//			BandPass bandPassFilter = new BandPass(200, 1000, sampleRate); // Center at 440Hz with 1000Hz bandwidth
-//			dispatcher.addAudioProcessor(bandPassFilter);
-//			dispatcher.addAudioProcessor(new LowPassSP(1000, sampleRate)); // Low-pass filter at 1kHz
-//			dispatcher.addAudioProcessor(new HighPass(300, sampleRate)); // High-pass filter at 300Hz
-			// Add a PitchProcessor to detect the pitch
-			PitchDetectionHandler pitchHandler = (pitchDetectionResult, audioEvent) -> {
-				float pitch = pitchDetectionResult.getPitch();
-				if ((pitch != -1)) {
-					if (pitch < LOWER) {
-						pitch = LOWER;
+			rpd = new RealTimePitchDetector();
+			rpd.start();
+			Thread audioThread = new Thread(() -> {
+				while (true) {
+					double pitch = rpd.readPitch();
+//							System.out.println(pitch);
+					if (pitch <= 2) {
+						continue;
 					}
-					if (pitch > UPPER) {
-						pitch = UPPER;
-					}
-					samples.add(pitch);
-					if (samples.size() > 3) {
-						samples.remove(0);
-					}
-					System.out.println("############################");
-					System.out.println("detected pitch: " + pitchDetectionResult.getPitch());
-					bubble.setRadius(computeRadius(samples));
-//					repaintable.update();
-					System.out.println();
+//							double radius = computeRadius(List.of(pitch));
+					bubble.setRadius(pitch);
 				}
-			};
-
-			dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_PITCH, // Choose
-					// an
-					// algorithm
-					sampleRate, bufferSize, pitchHandler));
-
-			// Start the dispatcher in a separate thread
-			Thread audioThread = new Thread(dispatcher);
+			});
+			audioThread.setDaemon(true);
 			audioThread.start();
 		} catch (LineUnavailableException e) {
-			System.err.println("Error accessing the microphone: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }
