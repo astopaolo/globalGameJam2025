@@ -39,6 +39,7 @@ public class ScorePanel extends JPanel {
 		setPreferredSize(new Dimension(1280, 768));
 
 		requestFocus();
+		loadFont();
 
 		addMouseMotionListener(new MouseMotionAdapter() {
 
@@ -56,6 +57,7 @@ public class ScorePanel extends JPanel {
 
 				repaint();
 			}
+
 		});
 
 		addMouseListener(new MouseAdapter() {
@@ -73,7 +75,6 @@ public class ScorePanel extends JPanel {
 
 		});
 
-		showScore();
 	}
 
 	@Override
@@ -87,13 +88,11 @@ public class ScorePanel extends JPanel {
 		g.setColor(Color.WHITE);
 		g.setFont(bubbleFont);
 
-		g.drawString("Points", 640 - 150, 200);
-
-		g.drawString("" + gameManager.getPoints(), 640 - 150, 384);
+		g.drawString("Points: " + gameManager.getPoints(), 640 - 400, 384);
 
 	}
 
-	private void showScore() {
+	private void loadFont() {
 		if (bubbleFont == null) {
 			try {
 				final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
