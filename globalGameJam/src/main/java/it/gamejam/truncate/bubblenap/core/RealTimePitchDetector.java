@@ -10,7 +10,7 @@ import com.github.psambit9791.jdsp.transform.FastFourier;
 
 public class RealTimePitchDetector {
 
-	private static final int SAMPLE_RATE = 44100; // Audio sample rate
+	private static final int SAMPLE_RATE = 48000; // Audio sample rate
 	private static final int FRAME_SIZE = 2048; // Size of audio frame for processing
 	private static final double YIN_THRESHOLD = 0.1; // Threshold for YIN pitch detection
 	private static final double SILENCE_THRESHOLD = 0.02; // Threshold for silence
@@ -103,15 +103,6 @@ public class RealTimePitchDetector {
 			return tau;
 		}
 		return (int) (tau - b / (2 * a));
-	}
-
-	/**
-	 * Perform FFT using jDSP and return the magnitude spectrum.
-	 */
-	private static double[] performFFT(double[] audioFrame) {
-		FastFourier fft = new FastFourier(audioFrame);
-		fft.transform(); // Execute FFT transform
-		return fft.getMagnitude(true); // Return magnitude spectrum
 	}
 
 	private final AudioFormat FORMAT;
