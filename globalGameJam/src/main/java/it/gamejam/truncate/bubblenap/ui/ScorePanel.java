@@ -71,7 +71,7 @@ public class ScorePanel extends JPanel {
 						&& (e.getY() <= (BACK_Y + ImageLoader.getImageBack().getHeight(null)))) {
 					SimpleAudioPlayer.playSyncSoundOnce(SoundProvider.getBubbleMenuClick(), 3f);
 
-					frame.drawPanel(EnumPanel.MENU_PANEL);
+					frame.drawPanel(EnumPanel.MENU_PANEL, true);
 				}
 			}
 
@@ -82,13 +82,13 @@ public class ScorePanel extends JPanel {
 	@Override
 	public void paintComponent(final Graphics g) {
 		super.paintComponent(g);
-		
+
 		Graphics2D g2d = (Graphics2D) g;
 
-        // Enable anti-aliasing for text
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		
+		// Enable anti-aliasing for text
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
 		g.drawImage(scoreBackground, 0, 0, this.getWidth(), this.getHeight(), null);
 		g.setColor(new Color(0, 0, 0, 0.6f));
 		g.fillRect(0, 0, getWidth(), getHeight());
