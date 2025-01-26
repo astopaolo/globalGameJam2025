@@ -98,7 +98,7 @@ public class SamplePlayer {
 			final int howManyEntitesWouldYouLikeMeToGenerateExactlyPleaseTellMeSoThatICanFulfillYourRequestOk,
 			final int maxPitchIndex) {
 		final List<Sample> entities = new ArrayList<>();
-		int startMeasure = random.nextInt(3);
+		int startMeasure = random.nextInt(2);
 		for (int i = 0; i < howManyEntitesWouldYouLikeMeToGenerateExactlyPleaseTellMeSoThatICanFulfillYourRequestOk; i++) {
 
 			final Sample sample = new Sample();

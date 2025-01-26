@@ -31,24 +31,10 @@ public class GameManager {
 
 	private double minFrequency = 0;
 
-	public void setMinFrequency(double minFrequency) {
-		this.minFrequency = minFrequency;
-		if (bubble != null) {
-			bubble.setMinFrequency(minFrequency);
-		}
-	}
-
 	private double maxFrequency = 0;
 
-	public void setMaxFrequency(double maxFrequency) {
-		this.maxFrequency = maxFrequency;
-		if (bubble != null) {
-			bubble.setMaxFrequency(maxFrequency);
-		}
-	}
-
 	public GameManager() {
-		setBubble(new Bubble(100.0, 578, 380, 50.0, 160.0));
+		setBubble(new Bubble(100.0, 578, 380, 100.0, 260.0));
 	}
 
 	public void addMovingObject(MovingObject mo) {
@@ -86,8 +72,16 @@ public class GameManager {
 		return bubble;
 	}
 
+	public long getDeathTimer() {
+		return deathTimer;
+	}
+
 	public List<MovingObject> getObjects() {
 		return objects;
+	}
+
+	public long getPoints() {
+		return points;
 	}
 
 	public Repaintable getRepaintable() {
@@ -102,12 +96,26 @@ public class GameManager {
 		this.bubble = bubble;
 	}
 
+	public void setMaxFrequency(double maxFrequency) {
+		this.maxFrequency = maxFrequency;
+		if (bubble != null) {
+			bubble.setMaxFrequency(maxFrequency);
+		}
+	}
+
+	public void setMinFrequency(double minFrequency) {
+		this.minFrequency = minFrequency;
+		if (bubble != null) {
+			bubble.setMinFrequency(minFrequency);
+		}
+	}
+
 	public void setRepaintable(final Repaintable repaintable) {
 		this.repaintable = repaintable;
 	}
 
 	public void startGame() {
-		startSound();
+//		startSound();
 		running.set(true);
 		gameOver.set(false);
 		points = 0;
@@ -134,6 +142,10 @@ public class GameManager {
 					last += elapsed;
 					points += elapsed;
 					deathTimer -= elapsed;
+					if (deathTimer <= 0) {
+						running.set(false);
+						gameOver.set(true);
+					}
 					try {
 						Thread.sleep(rate);
 					} catch (InterruptedException e) {
