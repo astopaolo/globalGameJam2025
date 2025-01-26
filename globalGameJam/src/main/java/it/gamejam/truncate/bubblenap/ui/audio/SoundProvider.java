@@ -10,6 +10,7 @@ public class SoundProvider {
 	private static byte[] menu;
 	private static byte[] gameOver;
 	private static byte[] videoIntro;
+	private static byte[] femaleScream;
 
 	private static byte[] bubbleMenuClick;
 	private static byte[] ggj_test_base;
@@ -17,6 +18,11 @@ public class SoundProvider {
 
 	static {
 		try {
+
+			try (FileInputStream fis = new FileInputStream("resources/audio/female-scream.wav")) {
+				femaleScream = new byte[fis.available()];
+				fis.read(getFemaleScream());
+			}
 
 			try (FileInputStream fis = new FileInputStream("resources/audio/video_intro.wav")) {
 				videoIntro = new byte[fis.available()];
@@ -89,6 +95,10 @@ public class SoundProvider {
 
 	public static byte[] getVideoIntro() {
 		return videoIntro;
+	}
+
+	public static byte[] getFemaleScream() {
+		return femaleScream;
 	}
 
 }

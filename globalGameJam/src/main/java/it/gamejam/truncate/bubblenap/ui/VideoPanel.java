@@ -17,13 +17,13 @@ public class VideoPanel extends JPanel {
 	private List<Image> videoFrames;
 	private int currentFrame;
 	private EnumPanel nextPanelToDraw;
-	private byte[] music;
+	private List<byte[]> musics;
 
 	public VideoPanel(final MainFrame frame, final List<Image> videoFrames, final EnumPanel nextPanelToDraw,
-			final byte[] music) {
+			final List<byte[]> musics) {
 		this.frame = frame;
 		this.nextPanelToDraw = nextPanelToDraw;
-		this.music = music;
+		this.musics = musics;
 		this.setLayout(null);
 		this.videoFrames = videoFrames;
 		currentFrame = 0;
@@ -42,7 +42,11 @@ public class VideoPanel extends JPanel {
 	}
 
 	public void playVideoAndDrawNextPanel() {
-		new Thread(() -> SimpleAudioPlayer.playSyncSoundOnce(music, 3f)).start();
+
+		for (byte[] music : musics) {
+
+			new Thread(() -> SimpleAudioPlayer.playSyncSoundOnce(music, 3f)).start();
+		}
 
 		Timer timer = new Timer(1000 / 24, e -> {
 			repaint();

@@ -1,6 +1,8 @@
 
 package it.gamejam.truncate.bubblenap.ui;
 
+import java.util.List;
+
 import javax.swing.JFrame;
 
 import it.gamejam.truncate.bubblenap.core.GameManager;
@@ -47,12 +49,12 @@ public class MainFrame extends JFrame {
 		menuPanel = new MenuPanel(this);
 		creditsMenu = new CreditsMenuPanel(this);
 		introVideoPanel = new VideoPanel(this, ImageLoader.getIntroVideoFrames(), EnumPanel.GAME_PANEL,
-				SoundProvider.getVideoIntro());
+				List.of(SoundProvider.getVideoIntro()));
 
 		gamePanel = new GamePanel(gameManager, this);
 		scorePanel = new ScorePanel(gameManager, this);
 		gameOverVideoPanel = new VideoPanel(this, ImageLoader.getGameOverVideoFrames(), EnumPanel.SCORE_PANEL,
-				SoundProvider.getGameOver());
+				List.of(SoundProvider.getGameOver(), SoundProvider.getFemaleScream()));
 
 		gameManager.setRepaintable(gamePanel);
 		setUndecorated(true);
