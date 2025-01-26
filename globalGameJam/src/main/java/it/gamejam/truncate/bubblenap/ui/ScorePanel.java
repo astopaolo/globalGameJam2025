@@ -80,14 +80,16 @@ public class ScorePanel extends JPanel {
 	public void paintComponent(final Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(scoreBackground, 0, 0, this.getWidth(), this.getHeight(), null);
+		g.setColor(new Color(0, 0, 0, 0.6f));
+		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(back, BACK_X, BACK_Y, 330, 83, null);
 
 		g.setColor(Color.CYAN);
 		g.setFont(bubbleFont);
 
-		g.drawString("Points", 600, 300);
+		g.drawString("Points", 350, 310);
 
-		g.drawString("" + gameManager.getPoints(), 600, 500);
+		g.drawString("" + gameManager.getPoints(), 650, 310);
 
 	}
 

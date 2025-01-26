@@ -10,6 +10,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JPanel;
 
@@ -23,6 +24,8 @@ public class GamePanel extends JPanel implements Repaintable {
 	private final GameManager gameManager;
 	private Font font;
 	private MainFrame mainFrame;
+
+	private AtomicBoolean startedGameOverThread = new AtomicBoolean(false);
 
 	public GamePanel(final GameManager gameManager, final MainFrame frame) {
 		this.gameManager = gameManager;
@@ -52,7 +55,47 @@ public class GamePanel extends JPanel implements Repaintable {
 
 	}
 
+	@Override
+	protected void paintComponent(final Graphics g) {
+//		System.out.println("GamePanel.paintComponent() " + bubble.getRadius());
+		super.paintComponent(g);
+		g.drawImage(ImageLoader.getGameScreen(), 0, 0, getWidth(), getHeight(), null);
+		if (gameManager.isGameOver()) {
+
+			g.drawImage(ImageLoader.getBollaMucoScoppiata(), bubble.getX() - (int) bubble.getRadius(),
+					bubble.getY() - (int) bubble.getRadius(), (int) bubble.getRadius() * 2,
+					(int) bubble.getRadius() * 2, null);
+			if (!startedGameOverThread.get()) {
+				startedGameOverThread.set(true);
+				new Thread() {
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(700);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						mainFrame.drawPanel(EnumPanel.GAME_OVER_VIDEO_PANEL);
+					};
+				}.start();
+			}
+		}
+		g.drawImage(ImageLoader.getBollaMuco(), bubble.getX() - (int) bubble.getRadius(),
+				bubble.getY() - (int) bubble.getRadius(), (int) bubble.getRadius() * 2, (int) bubble.getRadius() * 2,
+				null);
+		g.setColor(Color.RED);
+		gameManager.getObjects().forEach(o -> {
+			g.drawImage(o.getTransformedImage(), o.getX(), o.getY(), null);
+//			g.drawRect(o.getX(), o.getY(), o.getWidth(), o.getHeight());
+		});
+		g.setColor(Color.CYAN);
+		g.setFont(font);
+		g.drawString("Points " + gameManager.getPoints(), 50, 50);
+		g.drawString("Time " + (gameManager.getDeathTimer() / 1000), getWidth() - 350, 50);
+	}
+
 	public void startGame() {
+		startedGameOverThread.set(false);
 		gameManager.startGame();
 		if (font == null) {
 			try {
@@ -69,32 +112,6 @@ public class GamePanel extends JPanel implements Repaintable {
 	@Override
 	public void update() {
 		repaint();
-	}
-
-	@Override
-	protected void paintComponent(final Graphics g) {
-//		System.out.println("GamePanel.paintComponent() " + bubble.getRadius());
-		super.paintComponent(g);
-		g.drawImage(ImageLoader.getGameScreen(), 0, 0, getWidth(), getHeight(), null);
-//		g.drawImage(ImageLoader.getBollaMuco(), bubble.getX() - 10, bubble.getY() - 10, 20, 20, null);
-		g.drawImage(ImageLoader.getBollaMuco(), bubble.getX() - (int) bubble.getRadius(),
-				bubble.getY() - (int) bubble.getRadius(), (int) bubble.getRadius() * 2, (int) bubble.getRadius() * 2,
-				null);
-		g.setColor(Color.RED);
-		gameManager.getObjects().forEach(o -> {
-			g.drawImage(o.getTransformedImage(), o.getX(), o.getY(), null);
-//			g.drawRect(o.getX(), o.getY(), o.getWidth(), o.getHeight());
-		});
-		g.setColor(Color.CYAN);
-		g.setFont(font);
-		g.drawString("Points " + gameManager.getPoints(), 50, 50);
-		g.drawString("Time " + (gameManager.getDeathTimer() / 1000), getWidth() - 350, 50);
-		if (gameManager.isGameOver()) {
-			mainFrame.drawPanel(EnumPanel.GAME_OVER_VIDEO_PANEL);
-
-			// TODO chiudere thread gioco
-			// TODO stoppare la musica
-		}
 	}
 
 }

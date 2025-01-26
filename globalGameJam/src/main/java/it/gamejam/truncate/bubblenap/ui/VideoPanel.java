@@ -42,7 +42,7 @@ public class VideoPanel extends JPanel {
 	}
 
 	public void playVideoAndDrawNextPanel() {
-
+		currentFrame = 0;
 		for (byte[] music : musics) {
 
 			new Thread(() -> SimpleAudioPlayer.playSyncSoundOnce(music, 3f)).start();

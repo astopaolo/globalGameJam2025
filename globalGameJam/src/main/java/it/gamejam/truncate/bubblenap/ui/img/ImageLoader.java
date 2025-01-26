@@ -36,6 +36,7 @@ public class ImageLoader {
 	private static Image gameover;
 	private static Image gameScreen;
 	private static Image bollaMuco;
+	private static Image bollaMucoScoppiata;
 	private static Image hourGlass;
 	private static Image scoreBackground;
 
@@ -81,6 +82,8 @@ public class ImageLoader {
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/gameover.png"));
 			bollaMuco = ImageIO
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/bolla_muco.png"));
+			bollaMucoScoppiata = ImageIO.read(
+					Thread.currentThread().getContextClassLoader().getResource("img/game/bolla_muco_scoppiata.png"));
 			gameScreen = ImageIO
 					.read(Thread.currentThread().getContextClassLoader().getResource("img/game/GameScreen.png"));
 			hourGlass = ImageIO
@@ -100,6 +103,10 @@ public class ImageLoader {
 
 	public static Image getBollaMuco() {
 		return bollaMuco;
+	}
+
+	public static Image getBollaMucoScoppiata() {
+		return bollaMucoScoppiata;
 	}
 
 	public static Image getCreditsBed() {

@@ -130,6 +130,7 @@ public class GameManager {
 		gameOver.set(false);
 		points = 0;
 		deathTimer = 20_000;
+		objects.clear();
 		long rate = 1000 / 100;
 		Runnable updater = new Runnable() {
 
@@ -169,7 +170,7 @@ public class GameManager {
 		new Thread(updater).start();
 		SamplePlayer player = new SamplePlayer();
 		player.setGameManager(this);
-		player.loadLevel(level++);
+		player.loadLevel(level);
 //		player.setSamples(new ArrayList<Sample>(Arrays.asList(new Sample(1000), new Sample(2000), new Sample(3000),
 //				new Sample(4000), new Sample(5000))));
 		player.start();
@@ -207,7 +208,7 @@ public class GameManager {
 					System.out.println("############################");
 					System.out.println("detected pitch: " + pitchDetectionResult.getPitch());
 					bubble.setRadius(computeRadius(samples));
-					repaintable.update();
+//					repaintable.update();
 					System.out.println();
 				}
 			};
