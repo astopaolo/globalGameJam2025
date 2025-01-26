@@ -85,9 +85,9 @@ public class ScorePanel extends JPanel {
 		g.setColor(Color.CYAN);
 		g.setFont(bubbleFont);
 
-		g.drawString("Points" + gameManager.getPoints(), 400, 300);
+		g.drawString("Points", 600, 300);
 
-		g.drawString("" + gameManager.getPoints(), 400, 385);
+		g.drawString("" + gameManager.getPoints(), 600, 500);
 
 	}
 
